@@ -478,6 +478,8 @@ dns.qry.type == 1
 # OpenStego – Uso en Línea de Comandos (Markdown)
 <img width="933" height="424" alt="image" src="https://github.com/user-attachments/assets/cbc1d30b-d7dc-470c-b5a2-d9c25fba747c" />
 
+Luego desencriptar hash que te de la imagen en: https://hashes.com/
+
 
 ## Enlaces Útiles  
 - [OpenStego](https://www.openstego.com/)  

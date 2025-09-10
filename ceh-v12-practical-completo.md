@@ -658,6 +658,55 @@ snow -C -m "secret message" -p password original.txt output.txt
 # Extraer mensaje  
 snow -C -p password output.txt
 ```
+```markdown
+# Snow Steganography – Uso en Línea de Comandos
+
+**Synopsis**  
+```
+snow [ -CQS ] [ -p passwd ] [ -l line-length ] [ -f file | -m message ] [ infile [ outfile ] ]
+```
+
+**Descripción**  
+`snow` oculta mensajes en archivos de texto mediante espacios y tabulaciones al final de cada línea, invisibles en la mayoría de los visores de texto. Usa compresión Huffman optimizada para inglés y cifrado ICE en modo CFB.
+
+---
+
+## Opciones Principales
+
+| Opción                  | Descripción                                                                                       |
+|-------------------------|---------------------------------------------------------------------------------------------------|
+| `-C`                    | Comprimir al ocultar o descomprimir al extraer                                                    |
+| `-Q`                    | Modo silencioso (no muestra estadísticas)                                                         |
+| `-S`                    | Mostrar espacio aproximado disponible para ocultar                                                 |
+| `-p passwd`             | Cifrar/descifrar con la contraseña `passwd`                                                       |
+| `-l line-length`        | Longitud máxima de línea al ocultar (por defecto 80)                                              |
+| `-f message-file`       | Archivo cuyo contenido se ocultará                                                                |
+| `-m message-string`     | Cadena de texto a ocultar                                                                         |
+
+---
+
+## Ejemplos
+
+1. **Ocultar texto con compresión y cifrado**  
+   ```
+   snow -C -m "I am lying" -p "hello world" infile.txt outfile.txt
+   ```
+
+2. **Extraer mensaje cifrado**  
+   ```
+   snow -C -p "hello world" outfile.txt
+   ```
+
+3. **Evitar wrap, longitud de línea 72**  
+   ```
+   snow -C -l 72 -m "I am lying" infile.txt outfile.txt
+   ```
+
+4. **Ver capacidad de ocultación**  
+   ```
+   snow -S -l 72 infile.txt
+   ```
+```
 
 #### CRC32 Analysis
 **Herramienta Online:** `https://emn178.github.io/online-tools/crc/`

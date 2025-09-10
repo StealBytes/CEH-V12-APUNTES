@@ -668,3 +668,184 @@ lsof -i :port_number
 5. **Backup plans**: Tener múltiples enfoques para cada objetivo
 
 Esta guía cubre las herramientas esenciales del CEH v12 Practical con ejemplos reales de output y cuándo usar cada una en el entorno del examen.
+Aquí tienes un Cheat Sheet de find en formato Markdown para copiar y pegar, incluyendo ejemplos claros, explicación de los comandos, escenarios de uso y recomendaciones para entorno CEH Practical (usualmente en Parrot OS):
+
+***
+
+# Linux find Cheat Sheet (CEH Practical)
+
+## Uso Básico
+
+```bash
+find [ruta] [opciones] [expresión]
+```
+
+## Búsqueda por nombre o patrón
+
+```bash
+find . -name flag1.txt
+```
+_Busca el archivo “flag1.txt” en el directorio actual y subdirectorios._
+
+```bash
+find /home -name flag1.txt
+```
+_Busca “flag1.txt” dentro de /home._
+
+```bash
+find . -name "*.log"
+```
+_Todos los archivos que terminan en .log desde la carpeta actual._
+
+```bash
+find / -type d -name config
+```
+_Encuentra directorios llamados “config” bajo todo el sistema (requiere root para evitar “Permission denied”)._
+
+***
+
+## Búsqueda por permisos
+
+```bash
+find / -type f -perm 0777
+```
+_Archivos con permisos 777 (acceso total a cualquier usuario)._
+
+```bash
+find / -perm a=x
+```
+_Todos los archivos ejecutables por cualquier usuario._
+
+```bash
+find / -perm /u=s -type f 2>/dev/null
+```
+_Archivos con el bit SUID. SUID permite ejecutar como el propietario del archivo (clave en escalado de privilegios - típico del CEH Practical)._
+
+```bash
+find / -perm /g=s
+```
+_Archivos con el bit SGID (ejecuta como el grupo propietario)._
+
+```bash
+find / -perm -o w -type d 2>/dev/null
+```
+_Directorios mundialmente escribibles (potencialmente vulnerables)._
+
+***
+
+## Búsqueda por usuario/propietario
+
+```bash
+find /home -user frank
+```
+_Archivos en /home propiedad del usuario frank._
+
+```bash
+find / -group developers
+```
+_Archivos o directorios del grupo “developers”._
+
+***
+
+## Búsqueda por fecha y hora
+
+```bash
+find / -mtime -10
+```
+_Modificados en los últimos 10 días._
+
+```bash
+find / -atime -10
+```
+_Accedidos en los últimos 10 días._
+
+```bash
+find / -cmin -60
+```
+_Modificados en la última hora._
+
+```bash
+find / -amin -60
+```
+_Accesados en la última hora._
+
+***
+
+## Búsqueda por tamaño
+
+```bash
+find / -size 50M
+```
+_Archivos exactamente de 50 MB._
+
+```bash
+find / -size +100M
+```
+_Archivos mayores a 100 MB._
+
+```bash
+find / -size -1M
+```
+_Archivos menores a 1 MB._
+
+***
+
+## Búsqueda combinada y filtros avanzados
+
+```bash
+find / -type f -name "*.sh" -o -name "*.txt"
+```
+_Archivos .sh o .txt_
+
+```bash
+find / -writable -type d 2>/dev/null
+```
+_Directorios mundialmente escribibles._
+
+```bash
+find . -type d -empty
+```
+_Directorios vacíos._
+
+***
+
+## Acciones sobre los resultados
+
+```bash
+find . -type f -name "*.bak" -delete
+```
+_Elimina archivos .bak encontrados._
+
+```bash
+find /tmp -type f -name "*.log" -exec rm {} \;
+```
+_Ejecuta el comando `rm` sobre cada archivo .log en /tmp._
+
+***
+
+## Consejos y contexto CEH Practical
+
+- Usar `2>/dev/null` para evitar mensajes de “Permission denied”.
+- Los comandos find se lanzan siempre desde **Parrot OS** en terminal.
+- La búsqueda de SUID, SGID, archivos “777” o mundialmente escribibles es común para escalado de privilegios y análisis de riesgo.
+- El uso de find suele preceder al uso de scripts o explotación (p. ej., encontrar scripts modificables, binarios SUID, contraseñas en archivos .txt/.conf, etc).
+- Si buscas binarios tipo gcc, python, perl para técnicas de privesc, usa:
+  ```bash
+  find / -name gcc*
+  find / -name python*
+  find / -name perl*
+  ```
+
+***
+
+**¡Recuerda!** El output de find suele ser largo en CTFs/labs. Usa `| less` o `grep` para filtrar resultados rápidamente, ejemplo:
+
+```bash
+find / -type f -name "*.conf" 2>/dev/null | grep 'passwd'
+```
+
+***
+
+Fuentes y referencias:  
+- [Linux Audit - Find Cheat Sheet](https://linux-audit.com/cheat-sheets/find/)  
+- Prácticas CEH v12

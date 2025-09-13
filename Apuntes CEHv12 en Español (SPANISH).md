@@ -461,6 +461,10 @@ dns.qry.type == 1
 - Crear volúmenes cifrados
 - Montar/desmontar unidades seguras
 - Para encriptar y esconder particiones de disco
+Montar y ver particiones cifradas:
+
+<img width="1215" height="461" alt="image" src="https://github.com/user-attachments/assets/f636629f-a183-4750-95a8-59eecf277858" />
+
 
 #### CRYPTOOL
 - Análisis criptográfico

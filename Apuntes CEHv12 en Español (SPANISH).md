@@ -480,8 +480,7 @@ dns.qry.type == 1
 #### HASHMYFILES
 - Para calcular hashes y comparar hashes de archivos
 
-  <img width="1903" height="519" alt="image" src="https://github.com/user-attachments/assets/3639cb06-9a07-4c4d-94e6-7ce8f7556647" />
-
+<img width="1916" height="363" alt="image" src="https://github.com/user-attachments/assets/3aaa3535-b9c8-4855-a2ae-76db8dcf108b" />
   
 
 #### STEGANOGRAFÍA

@@ -465,7 +465,12 @@ dns.qry.type == 1
 #### CRYPTOOL
 - Análisis criptográfico
 - Cifrado/descifrado con múltiples algoritmos
-- Para descifrar/cifrar archivos con data hex 
+- Para descifrar/cifrar archivos con data .hex
+Para decifrar un archivo .hex :
+
+<img width="619" height="172" alt="image" src="https://github.com/user-attachments/assets/3afaeab9-4e10-4116-9bf8-8baab7f5075b" />
+<img width="947" height="209" alt="image" src="https://github.com/user-attachments/assets/8a851ff9-471c-4183-9eac-ee17443dbdc7" />
+
 
 #### HASHCALC
 - Cálculo de hashes MD5, SHA1, SHA256
@@ -474,8 +479,18 @@ dns.qry.type == 1
 #### BCTTEXTENCONDER 
 - Para encodear o decodear texto en un archivo (.hex)
 
-#### CRYPTOGFORGE
+Para deseencriptar un archivo, encriptado por BCTTextEncoder
+
+<img width="625" height="309" alt="image" src="https://github.com/user-attachments/assets/e2acbc18-8cff-4609-9dfa-1d15ba2575cc" />
+
+
+#### CRYPTOFORGE
 - Para encriptar y desencriptar archivos
+
+Para desencriptar con una contraseña:
+
+<img width="586" height="284" alt="image" src="https://github.com/user-attachments/assets/050708f2-1a93-4a51-8cf7-1700599571a9" />
+
 
 #### HASHMYFILES
 - Para calcular hashes y comparar hashes de archivos

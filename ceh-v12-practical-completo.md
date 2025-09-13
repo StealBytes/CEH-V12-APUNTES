@@ -460,14 +460,26 @@ dns.qry.type == 1
 #### VERACRYPT
 - Crear volúmenes cifrados
 - Montar/desmontar unidades seguras
+- Para encriptar y esconder particiones de disco
 
 #### CRYPTOOL
 - Análisis criptográfico
 - Cifrado/descifrado con múltiples algoritmos
+- Para descifrar/cifrar archivos con data hex 
 
 #### HASHCALC
 - Cálculo de hashes MD5, SHA1, SHA256
 - Verificación de integridad
+
+#### BCTTEXTENCONDER 
+- Para encodear o decodear texto en un archivo (.hex)
+
+#### CRYPTOGFORGE
+- Para encriptar y desencriptar archivos
+
+#### HASHMYFILES
+- Para calcular hashes y comparar hashes de archivos
+  
 
 #### STEGANOGRAFÍA
 

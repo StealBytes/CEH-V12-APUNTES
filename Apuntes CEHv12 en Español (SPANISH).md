@@ -217,6 +217,239 @@ nxc smb target_ip -u usuario -p password
 ```
 
 ---
+# Apuntes CEH v12: Enumeración de Servicios y Ejemplos de Output
+
+## SNMP (Puertos 161-162/UDP)
+
+**Escaneo de toda la red SNMP:**
+```bash
+nmap -sU 192.168.1.0/24
+```
+_Ejemplo output:_
+```
+PORT    STATE SERVICE
+161/udp open  snmp
+162/udp open  snmptrap
+```
+
+**Enumeración con snmp-check:**
+```bash
+snmp-check 192.168.1.5
+```
+_Ejemplo output:_
+```
+System Name: ubuntu1
+Contact: admin@domain.local
+...otros datos SNMP
+```
+
+**Enumerar procesos SNMP (nmap):**
+```bash
+nmap -sU -p 161 --script=snmp-processes 192.168.1.5
+```
+_Ejemplo output:_
+```
+161/udp open snmp
+| snmp-processes:
+|   1. init
+|   2. sshd
+|   3. snmpd
+```
+
+**Enumerar interfaces SNMP:**
+```bash
+nmap -sU -p161 --script=snmp-interfaces 192.168.1.5
+```
+_Ejemplo output:_
+```
+161/udp open snmp
+| snmp-interfaces:
+|   eth0: up
+|   eth1: down
+```
+
+**Validar strings SNMP en Metasploit:**
+```bash
+use auxiliary/scanner/snmp/snmplogin
+set RHOSTS 192.168.1.5
+set RPORT 161
+run
+```
+_Ejemplo output:_
+```
+[+] Valid SNMP login found: public
+```
+
+---
+
+## FTP (Puerto 21)
+
+**Descubrir FTP abiertos en toda la red:**
+```bash
+nmap -p 21 192.168.1.0/24
+```
+_Ejemplo output:_
+```
+PORT   STATE SERVICE
+21/tcp open  ftp
+```
+
+**Bruteforce FTP con Hydra:**
+```bash
+hydra -l user -P wordlist.txt ftp://192.168.1.10
+hydra -L /usr/share/wordlists/metasploit/common_users.txt -P password_list.txt 192.168.1.10 ftp
+```
+_Ejemplo output:_
+```
+[21][ftp] host: 192.168.1.10 login: admin password: p@ssw0rd
+```
+
+**Descargar archivo desde FTP:**
+```bash
+get archivo.txt
+```
+_Ejemplo output:_
+```
+200 PORT command successful
+150 Opening ASCII mode data connection for archivo.txt
+226 Transfer complete
+```
+
+---
+
+## SMB (Puertos 445 y 139)
+
+**Enumerar shares SMB:**
+```bash
+nmap -p445 --script=smb-enum-shares 192.168.1.11
+```
+_Ejemplo output:_
+```
+| smb-enum-shares:
+|   ADMIN$: Remote Admin
+|   C$: Default share
+|   Public: Read/Write
+```
+
+**Enumerar usuarios SMB:**
+```bash
+nmap -p445 --script smb-enum-users --script-args smbusername=administrator,smbpassword=contraseña 192.168.1.11
+```
+_Ejemplo output:_
+```
+| smb-enum-users:
+|   Administrator
+|   Guest
+|   User1
+```
+
+**Enumerar grupos SMB:**
+```bash
+nmap -p445 --script smb-enum-groups --script-args smbusername=administrator,smbpassword=contraseña 192.168.1.11
+```
+_Ejemplo output:_
+```
+| smb-enum-groups:
+|   Administrators
+|   Users
+|   Guests
+```
+
+**Enumeración de nivel de seguridad:**
+```bash
+nmap -sCV -A -T4 -p445,139 192.168.1.11
+```
+_Ejemplo output:_
+```
+PORT    STATE SERVICE
+445/tcp open  microsoft-ds
+139/tcp open  netbios-ssn
+MAC Address: 08:00:27:13:f9:36
+```
+
+**Enumerar servicios SMB:**
+```bash
+nmap -p445 --script=smb-enum-services --script-args smbusername=administrator,smbpassword=contraseñadefinitiva 192.168.1.11
+```
+_Ejemplo output:_
+```
+| smb-enum-services:
+|   Service1: Running
+|   Service2: Stopped
+```
+
+**Buscar scripts SMB:**  
+https://nmap.org/nsedoc/scripts/
+
+---
+
+## RDP (Puerto 3389)
+
+**Detectar RDP en la red:**
+```bash
+nmap -p3389 -T4 -n -sS 192.168.1.12
+```
+_Ejemplo output:_
+```
+PORT     STATE SERVICE
+3389/tcp open  ms-wbt-server
+```
+
+**Verificar RDP con Metasploit:**
+```bash
+use auxiliary/scanner/rdp/rdp_scanner
+set RHOSTS 192.168.1.12
+set RPORT 3389
+run
+```
+_Ejemplo output:_
+```
+[+] 192.168.1.12:3389 is running RDP
+```
+
+**Fuerza bruta RDP con Hydra:**
+```bash
+hydra -L diccionario.txt -P diccionario_password.txt rdp://192.168.1.12 -s 3389
+```
+_Ejemplo output:_
+```
+[3389][RDP] host: 192.168.1.12 login: admin password: 123456
+```
+
+**Acceder con xfreerdp:**
+```bash
+xfreerdp /u:usuario /p:password /v:192.168.1.12:3389
+```
+
+**Buscar la flag (generalmente en C:\):**
+
+---
+
+## NETBIOS (Puertos 137/UDP, 138/UDP, 139/TCP)
+
+**Detectar NETBIOS en la red:**
+```bash
+nmap -sP 192.168.1.0/24
+```
+_Ejemplo output:_
+```
+Host 192.168.1.13 appears to be up.  NetBIOS: present
+```
+
+**Enumerar versión de NETBIOS:**
+```bash
+nmap -sV --script nbstat.nse 192.168.1.13
+```
+_Ejemplo output:_
+```
+| nbstat.nse:
+|   Server Name: FILESERVER
+|   Version: Windows Server 2019
+```
+
+---
+
+> Última actualización: 13 sept 2025
 
 ## 🔓 PASSWORD ATTACKS & CRACKING
 

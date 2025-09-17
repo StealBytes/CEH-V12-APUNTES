@@ -2049,8 +2049,6 @@ Program Headers:
 
 RATS (Remote acces trojans)
 
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
-
 # normalmente los archivos en la prueba de CEH esta en la carpeta numero 6 de malware analisys, ir a trojans types, remote acces trojan (RAT) y elegir njrat, utilizar el puerto 5552, escnear la red para encontrar el "Servicio relacionado" (ayudame a saberlo), con JPS virus maker, utiliza el puerto 4000.
 
 

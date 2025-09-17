@@ -1931,3 +1931,50 @@ Program Headers:
 ---
 
 > **Tip:** Elige **Ghidra** para análisis estático profundo, **IDA Pro** para reversing profesional complejo y **OllyDbg** para debugging interactivo en tiempo real.```
+
+#### ANALISIS DE MALWARE
+
+# 🦠 Análisis de Malware Online: VirusTotal vs. Hybrid Analysis
+
+## 🌐 VirusTotal
+- 🔍 **¿Qué ofrece?**  
+  - Escaneo de hashes y archivos contra más de 70 AVs.  
+  - Reporte de detecciones, YARA rules, metadatos (PE imports, certificates).  
+- ❓ **Preguntas en examen:**  
+  - “¿Cómo comprobar rápidamente si un archivo es malicioso?”  
+  - “¿Cómo obtener indicadores de compromiso (IoCs) de un hash?”  
+- ✅ **Usar cuando:**  
+  - Necesites un veredicto rápido de antivirus múltiples.  
+  - Quieras buscar dominios/IP relacionados o URL de distribución.  
+  - Requieras metadatos básicos (firmas digitales, secciones PE).
+
+## ⚙️ Hybrid Analysis
+- 🛠️ **¿Qué ofrece?**  
+  - Sandbox dinámico Windows y Linux (comportamiento en ejecución).  
+  - Captura de tráfico de red, filesystem, snapshots de memoria.  
+  - Reports detallados de API calls, strings, procesos hijos.  
+- ❓ **Preguntas en examen:**  
+  - “¿Cómo analizar comportamiento de un malware en ejecución?”  
+  - “¿Cómo obtener trazas de red y filesystem para un sample?”  
+- ✅ **Usar cuando:**  
+  - Necesites análisis dinámico para ver payloads, C2 callbacks.  
+  - Quieras detallar acciones del malware (registro de APIs, creación de procesos).  
+  - Busques capturas de red (PCAP) o screenshots de ejecución.
+
+---
+
+## 📊 Comparativa Rápida
+
+| Característica          | VirusTotal        | Hybrid Analysis     |
+|-------------------------|-------------------|---------------------|
+| Tipo de análisis        | Estático          | Dinámico + Estático |
+| AV engines              | ≥ 70              | Integrado (Menos)   |
+| Sandbox en ejecución    | No                | Sí                  |
+| Tráfico de red (PCAP)   | No                | Sí                  |
+| API calls & filesystem  | Limitado          | Completo            |
+| IoCs & metadatos        | Excelente         | Bueno               |
+
+---
+
+> **Tip:** Empieza con **VirusTotal** para confirmar rápidamente detección y metadatos. Luego, usa **Hybrid Analysis** para profundizar en el comportamiento dinámico y extraer IoCs avanzados.```
+

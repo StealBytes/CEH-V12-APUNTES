@@ -1862,7 +1862,7 @@ Fuentes y referencias:
 - Prácticas CEH v12
 
   ##### ANALISIS DE EJECUTABLES - DECOMPILAR -   EJECUTABLES
-```markdown
+
 # Ghidra: Localizar y Leer PT_LOAD(0)
 
 ## 1. Abrir el binario en Ghidra

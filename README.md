@@ -2052,3 +2052,61 @@ Program Headers:
 
 > **Tip:** Empieza con **VirusTotal** para confirmar rápidamente detección y metadatos. Luego, usa **Hybrid Analysis** para profundizar en el comportamiento dinámico y extraer IoCs avanzados.```
 
+RATS (Remote acces trojans)
+
+<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
+
+# normalmente los archivos en la prueba de CEH esta en la carpeta numero 6 de malware analisys, ir a trojans types, remote acces trojan (RAT) y elegir njrat, utilizar el puerto 5552, escnear la red para encontrar el "Servicio relacionado" (ayudame a saberlo), con JPS virus maker, utiliza el puerto 4000.
+
+```markdown
+# Apuntes: njRAT y JPS Virus Maker en CEH Practical Exam
+
+---
+
+## 🐍 njRAT
+
+- 🟢 **Puerto predeterminado:** 5552  
+- 🔍 **Servicio relacionado:** El servicio típico funciona en puerto TCP 5552 y es usado para comunicación cliente-servidor entre el RAT y el controlador.  
+- 🔎 **Escanear red para njRAT:**  
+```
+
+nmap -p 5552 -sV 10.10.55.0/24 --open
+
+```
+Busca hosts con puerto TCP 5552 abierto que sugieran presencia del RAT njRAT.
+
+---
+
+## 🦠 JPS Virus Maker
+
+- 🟢 **Puerto predeterminado:** 4000 TCP  
+- 🔍 **Servicio relacionado:** El malware generado por JPS Virus Maker suele usar el puerto 4000 para comunicación remota.  
+- 🔎 **Escanear red para JPS:**  
+```
+
+nmap -p 4000 -sV 10.10.55.0/24 --open
+
+```
+Detecta hosts con servicio activo en puerto 4000.
+
+---
+
+## 👨‍💻 Uso en práctica CEH
+
+- Accede a la carpeta 6 → Malware Analysis → Trojan Types → Remote Access Trojan (RAT) → elegir njRAT.  
+- Confirma y escanea la red en búsqueda de puerto 5552.  
+- Para JPS Virus Maker, escanea puerto 4000.  
+- Una vez identificado equipo, conéctate usando cliente RAT para acceder remotamente.
+
+---
+
+## ✨ Tips y notas
+
+- Para escaneo avanzado y detección, usar también análisis de tráfico con Wireshark y detectar tráfico en estos puertos.  
+- Monitorizar conexiones persistentes en esos puertos para detectar actividad RAT.  
+- En caso de práctica, probar acceso con cliente njRAT/JPS al host que responde en el puerto correspondiente.
+
+```
+
+
+

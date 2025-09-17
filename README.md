@@ -1627,6 +1627,12 @@ aireplay-ng -0 100 -a AA:BB:CC:DD:EE:FF wlan0mon
 
 # Cracking
 aircrack-ng -w wordlist.txt capture.cap
+
+#Cracking con hascat
+Hcxpcapngtool -o output.hccapx archivo.cap (transforma el archivo para que hashcat lo pueda reconocer)
+Hascat output.hccapx (crackeo del archivo)
+<img width="881" height="185" alt="image" src="https://github.com/user-attachments/assets/c64fe9d7-a605-4725-897b-564fda32524f" />
+
 ```
 
 ### Cloud Enumeration

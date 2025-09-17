@@ -568,7 +568,58 @@ IP Address       MAC Address       Count     Len  MAC Vendor / Hostname
 ```
 
 ---
+## LDAP Enumeration
 
+🔍 **1. Descubrir hosts con LDAP (puerto 389)**  
+```bash
+nmap -p 389 --open -sV 192.168.1.0/24
+```
+
+📖 **2. Consultar Root DSE (Directorio raíz)**  
+```bash
+ldapsearch -x -h <IP_DC> -s base -b "" namingContexts defaultNamingContext rootDomainNamingContext
+```
+
+🗂️ **3. Obtener contexto de dominio y esquema**  
+```bash
+ldapsearch -x -h <IP_DC> \
+  -b "" defaultNamingContext schemaNamingContext
+```
+
+👤 **4. Enumerar usuarios del dominio**  
+```bash
+ldapsearch -x -h <IP_DC> \
+  -b "DC=domain,DC=com" "(objectClass=user)" \
+  sAMAccountName displayName
+```
+
+👥 **5. Enumerar grupos del dominio**  
+```bash
+ldapsearch -x -h <IP_DC> \
+  -b "DC=domain,DC=com" "(objectClass=group)" \
+  cn member
+```
+
+🖥️ **6. Enumerar controladores de dominio (sitios AD)**  
+```bash
+ldapsearch -x -h <IP_DC> \
+  -b "CN=Sites,CN=Configuration,DC=domain,DC=com" objectClass=site
+```
+
+⚙️ **7. Extraer versión del controlador de dominio**  
+```bash
+ldapsearch -x -h <IP_DC> \
+  -b "" supportedLDAPVersion msDS-Behavior-Version
+```
+
+📂 **8. Dump completo de un contenedor (Users)**  
+```bash
+ldapsearch -x -h <IP_DC> \
+  -D "domain\\user" -W \
+  -b "CN=Users,DC=domain,DC=com" "(objectClass=*)"
+```
+
+> **Tip:** Reemplaza `<IP_DC>` y `domain,DC=com` con los valores reales de tu entorno.
 ## 📁 SMB/NETBIOS ENUMERATION
 
 ### Puertos Objetivo

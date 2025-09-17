@@ -1860,3 +1860,39 @@ find / -type f -name "*.conf" 2>/dev/null | grep 'passwd'
 Fuentes y referencias:  
 - [Linux Audit - Find Cheat Sheet](https://linux-audit.com/cheat-sheets/find/)  
 - Prácticas CEH v12
+
+  ##### ANALISIS DE EJECUTABLES - MALWARE
+```markdown
+# Ghidra: Localizar y Leer PT_LOAD(0)
+
+## 1. Abrir el binario en Ghidra
+1. Inicia Ghidra y crea/proyecto nuevo.  
+2. Importa `Strange_File-1` desde la ruta correspondiente.  
+3. En el diálogo de importación, confirma el uso de **ELF Loader**.
+
+## 2. Navegar a Program Tree
+- Ve a **Window → Program Tree** para mostrar la vista de árbol de secciones.
+
+## 3. Expandir Program Headers
+- En **Program Tree**, expande la carpeta **Program Headers**.  
+- Aquí aparecen todos los segmentos ELF, incluidos `PT_LOAD[0]`, `PT_LOAD[1]`, etc.
+
+## 4. Seleccionar PT_LOAD[0]
+1. Haz clic en la entrada **PT_LOAD[0]**.  
+2. Fíjate en el panel central (Listing) donde se muestran sus detalles.
+
+## 5. Leer el tamaño (p_filesz)
+- En la tabla de propiedades de PT_LOAD[0], localiza el campo **`p_filesz`**.  
+- Ese valor (en bytes) es el tamaño del segmento.
+
+## 6. Ejemplo visual  
+```
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSz MemSz  Flg Align
+  LOAD           0x000000 0x00400000 0x00400000 0x0e1c 0x0e1c R E 0x1000  ← PT_LOAD
+```
+- **FileSz (p_filesz)** = `0x0e1c` (3612 bytes)
+
+---
+
+**Nota:** PT_LOAD siempre es el primer “LOAD” en Program Headers. El campo FileSz/P_Filesz es el que debes anotar para cualquier cálculo adicional de hash o análisis.```

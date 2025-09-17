@@ -1370,35 +1370,40 @@ snow [ -CQS ] [ -p passwd ] [ -l line-length ] [ -f file | -m message ] [ infile
 
 #### Decifrar  hash usando una contraseña previa:
 
-Para usar CyberChef con una contraseña y luego aplicar un hash sigue estos pasos:
+Para Descifrado con Contraseña:
+Busca "AES" en Operations y usa:
 
-Abre CyberChef y limpia la “Recipe” (receta) arrastrando todo lo que haya al cubo de basura.
+"AES Decrypt" - Para descifrar contenido cifrado con AES usando contraseña
 
-En la lista de “Operations” busca y añade el paso “Input -> Set Key” (o “Keyed Hash”) si quieres proporcionar una contraseña para cifrado o para un HMAC.
+Busca "DES" para:
 
-Arrástralo al panel de la derecha, arriba de todo.
+"DES Decrypt" - Para descifrar contenido DES con contraseña
 
-En el panel del paso configura tu contraseña en el campo “Key” (por ejemplo, P@ssw0rd123).
+Busca "XOR" para:
 
-A continuación, añade la operación de hash que necesites (por ejemplo, “Crypto -> SHA-256”):
+"XOR" - Para descifrado XOR con contraseña como clave
 
-Busca “SHA-256” en “Operations” y arrástralo justo debajo del paso de la clave.
+Procedimiento correcto:
+Arrastrar "AES Decrypt" (o "DES Decrypt") desde Operations a la Recipe
 
-Por defecto no necesita más configuración.
+En la configuración del AES Decrypt:
 
-En el panel “Input” (a la derecha) pega el texto o contenido cifrado que quieras procesar.
+Key: Ingresa P@ssw0rd123 (la contraseña de Henry)
 
-Verifica que “Auto Bake” esté activado (casilla marcada abajo), o pulsa el botón verde BAKE! para obtener el resultado.
+Mode: Prueba "CBC" primero, luego "ECB" si no funciona
 
-El valor resultante aparecerá en el panel “Output” inmediatamente tras el hash aplicado con tu contraseña.
+Input format: "Hex" si el contenido está en hexadecimal
 
-Ejemplo de receta:
+En el panel Input, pega el contenido cifrado de Sniff.txt
 
-Set Key: P@ssw0rd123
+Presiona BAKE!
 
-SHA-256
+Si no funciona AES, prueba:
+"XOR" con Key: P@ssw0rd123
 
-Con “Auto Bake” verás el hash de tu texto usando la contraseña como clave (en esquemas HMAC) o como paso de preparación si fuera un cifrado.
+"Triple DES Decrypt" con Key: P@ssw0rd123
+
+Las opciones de "key" que muestras en la imagen son para generar claves criptográficas, no para usar una contraseña existente para descifrar.
 ---
 
 

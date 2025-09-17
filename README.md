@@ -1931,7 +1931,7 @@ Program Headers:
 ---
 
 > **Tip:** Elige **Ghidra** para análisis estático profundo, **IDA Pro** para reversing profesional complejo y **OllyDbg** para debugging interactivo en tiempo real.```
-
+---
 #### ANALISIS DE MALWARE
 
 # 🦠 Análisis de Malware Online: VirusTotal vs. Hybrid Analysis

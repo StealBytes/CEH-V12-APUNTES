@@ -1633,6 +1633,73 @@ Hcxpcapngtool -o output.hccapx archivo.cap (transforma el archivo para que hashc
 Hascat output.hccapx (crackeo del archivo)
 <img width="881" height="185" alt="image" src="https://github.com/user-attachments/assets/c64fe9d7-a605-4725-897b-564fda32524f" />
 
+<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
+
+# transforma lo de la foto en apuntes para hacking wifi
+
+```markdown
+# 🛡️ Apuntes de Hacking Wi-Fi con aircrack-ng
+
+## 1. Captura de Tráfico (airmon-ng + airodump-ng)
+- 🔧 Iniciar modo monitor:
+```
+
+sudo airmon-ng start wlan0
+
+```
+- 📡 Capturar paquetes en un canal específico:
+```
+
+sudo airodump-ng --bssid 02:1A:11:FF:D9:BD -c 8 --write NinjaJc01-01 wlan0mon
+
+```
+- `--bssid`: dirección MAC del AP  
+- `-c`: canal del AP  
+- `--write`: prefijo de archivo .cap  
+
+## 2. Fuerza bruta de clave WPA/WPA2 (aircrack-ng)
+- 🎯 Comando mostrado:
+```
+
+aircrack-ng -b 02:1A:11:FF:D9:BD -e 'James Honor 8' \
+-w /usr/share/wordlists/rockyou.txt NinjaJc01-01.cap
+
+```
+- `-b`: MAC del AP objetivo  
+- `-e`: ESSID (nombre de la red)  
+- `-w`: ruta al wordlist (rockyou.txt)  
+- `NinjaJc01-01.cap`: fichero de captura de 4-way handshake  
+
+## 3. Interpretación de parámetros
+- 🔍 **-b 02:1A:11:FF:D9:BD**  
+Identifica el punto de acceso objetivo por MAC.  
+- 🏷️ **-e 'James Honor 8'**  
+Indica el nombre de la red (ESSID).  
+- 📂 **-w rockyou.txt**  
+Wordlist popular para ataques de diccionario.  
+- 📁 **cap file**  
+Contiene el handshake necesario para verificar contraseñas.
+
+## 4. Flujo de trabajo recomendado
+1. Arrancar interfaz en modo monitor.  
+2. Escanear redes y elegir objetivo (airodump-ng).  
+3. Filtros BSSID/Canal para capturar handshake.  
+4. Ejecutar decrackeo con aircrack-ng y wordlist.  
+5. Analizar resultados y, si falla, probar wordlists adicionales.
+
+---
+
+> **Consejo:** Asegúrate de capturar al menos un `WPA handshake` antes de iniciar aircrack-ng.  
+```
+
+<span style="display:none">[^1]</span>
+
+<div style="text-align: center">⁂</div>
+
+[^1]: image.jpg
+
+
+
 ```
 
 ### Cloud Enumeration

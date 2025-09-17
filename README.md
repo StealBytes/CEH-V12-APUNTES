@@ -1633,11 +1633,6 @@ Hcxpcapngtool -o output.hccapx archivo.cap (transforma el archivo para que hashc
 Hascat output.hccapx (crackeo del archivo)
 <img width="881" height="185" alt="image" src="https://github.com/user-attachments/assets/c64fe9d7-a605-4725-897b-564fda32524f" />
 
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
-
-# transforma lo de la foto en apuntes para hacking wifi
-
-```markdown
 # 🛡️ Apuntes de Hacking Wi-Fi con aircrack-ng
 
 ## 1. Captura de Tráfico (airmon-ng + airodump-ng)
@@ -2058,7 +2053,7 @@ RATS (Remote acces trojans)
 
 # normalmente los archivos en la prueba de CEH esta en la carpeta numero 6 de malware analisys, ir a trojans types, remote acces trojan (RAT) y elegir njrat, utilizar el puerto 5552, escnear la red para encontrar el "Servicio relacionado" (ayudame a saberlo), con JPS virus maker, utiliza el puerto 4000.
 
-```markdown
+
 # Apuntes: njRAT y JPS Virus Maker en CEH Practical Exam
 
 ---

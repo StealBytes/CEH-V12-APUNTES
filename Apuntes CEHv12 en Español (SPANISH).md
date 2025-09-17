@@ -75,6 +75,199 @@ nslookup
 ```
 
 ---
+# Apuntes CEH v12: Reconocimiento DNS
+
+## Tipos de Registros DNS Comunes
+
+### Common DNS Record Types
+
+| Record | Description |
+|--------|-------------|
+| **A** | Address record (IPv4) |
+| **AAAA** | Address record (IPv6) |
+| **CNAME** | Canonical Name record |
+| **MX** | Mail Exchanger record |
+| **NS** | Nameserver record |
+| **PTR** | Pointer record |
+| **SOA** | Start of Authority record |
+| **SRV** | Service Location record |
+| **TXT** | Text record |
+
+### Zone Transfer (AXFR)
+**AXFR**: Zone transfer. Includes all records about a domain
+
+---
+
+## Comandos de Enumeración DNS
+
+### Consultas DNS Básicas
+
+**Consultar registro A:**
+```bash
+nslookup domain.com
+dig domain.com A
+```
+_Ejemplo output:_
+```
+domain.com.    300    IN    A    192.168.1.10
+```
+
+**Consultar registro MX:**
+```bash
+dig domain.com MX
+nslookup -type=MX domain.com
+```
+_Ejemplo output:_
+```
+domain.com.    300    IN    MX    10 mail.domain.com.
+```
+
+**Consultar registro NS:**
+```bash
+dig domain.com NS
+nslookup -type=NS domain.com
+```
+_Ejemplo output:_
+```
+domain.com.    300    IN    NS    ns1.domain.com.
+domain.com.    300    IN    NS    ns2.domain.com.
+```
+
+**Consultar registro TXT:**
+```bash
+dig domain.com TXT
+nslookup -type=TXT domain.com
+```
+_Ejemplo output:_
+```
+domain.com.    300    IN    TXT    "v=spf1 include:_spf.google.com ~all"
+```
+
+**Consultar registro SOA:**
+```bash
+dig domain.com SOA
+nslookup -type=SOA domain.com
+```
+_Ejemplo output:_
+```
+domain.com.    300    IN    SOA    ns1.domain.com. admin.domain.com.
+```
+
+---
+
+## Zone Transfer (AXFR)
+
+### Intentar Zone Transfer
+```bash
+dig axfr domain.com @ns1.domain.com
+nslookup
+> server ns1.domain.com
+> set type=axfr
+> domain.com
+```
+_Ejemplo output exitoso:_
+```
+domain.com.            SOA    ns1.domain.com. admin.domain.com.
+www.domain.com.        A      192.168.1.10
+mail.domain.com.       A      192.168.1.11  
+ftp.domain.com.        A      192.168.1.12
+```
+
+### Automatizar Zone Transfer con dnsrecon
+```bash
+dnsrecon -d domain.com -t axfr
+```
+_Ejemplo output:_
+```
+[*] Checking for Zone Transfer for domain.com name servers
+[*] Zone Transfer was successful!!
+[*] NS ns1.domain.com 192.168.1.5
+[*] A www.domain.com 192.168.1.10
+```
+
+---
+
+## Enumeración Avanzada DNS
+
+### Usar DNSenum
+```bash
+dnsenum domain.com
+```
+_Ejemplo output:_
+```
+Host's addresses:
+domain.com.                      300      IN    A        192.168.1.10
+
+Name Servers:
+ns1.domain.com.                  300      IN    A        192.168.1.5
+```
+
+### Usar Fierce para encontrar subdominios
+```bash
+fierce -dns domain.com
+```
+_Ejemplo output:_
+```
+DNS Servers for domain.com:
+        ns1.domain.com
+        ns2.domain.com
+
+Trying zone transfer first...
+        Zone transfer failed.
+
+Now performing dictionary-based testing...
+        www.domain.com: 192.168.1.10
+        mail.domain.com: 192.168.1.11
+```
+
+### Reverse DNS Lookup
+```bash
+dig -x 192.168.1.10
+nslookup 192.168.1.10
+```
+_Ejemplo output:_
+```
+10.1.168.192.in-addr.arpa. 300 IN PTR www.domain.com.
+```
+
+---
+
+## Herramientas Adicionales
+
+### DNSmap - Escaneo de subdominios
+```bash
+dnsmap domain.com
+```
+
+### TheHarvester - Recopilación de información
+```bash
+theHarvester -d domain.com -b google
+```
+
+### Amass - Enumeración de subdominios
+```bash
+amass enum -d domain.com
+```
+
+---
+
+## Notas Importantes
+
+### Consideraciones de Enumeración DNS:
+- **Zone Transfer** es la técnica más efectiva si está mal configurada
+- Los registros **MX** revelan servidores de correo
+- Los registros **NS** muestran servidores DNS autoritarios
+- Los registros **TXT** pueden contener información sensible (SPF, DKIM)
+
+### Tips Prácticos:
+- Siempre intentar zone transfer en todos los nameservers encontrados
+- Usar múltiples herramientas para enumeración completa
+- Los subdominios pueden revelar servicios internos
+- Documentar todos los subdominios y IPs encontradas
+
+---
+
+> Última actualización: 16 sept 2025
 
 ## 🖥️ NETWORK SCANNING & ENUMERATION
 

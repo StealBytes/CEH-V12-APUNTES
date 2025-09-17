@@ -1892,11 +1892,11 @@ Program Headers:
   LOAD           0x000000 0x00400000 0x00400000 0x0e1c 0x0e1c R E 0x1000  ← PT_LOAD
 ```
 - **FileSz (p_filesz)** = `0x0e1c` (3612 bytes)
-
+***
 ---
 
 **Nota:** PT_LOAD siempre es el primer “LOAD” en Program Headers. El campo FileSz/P_Filesz es el que debes anotar para cualquier cálculo adicional de hash o análisis.```
-
+***
 ```markdown
 # 🛠️ Herramientas de Reversing y Debugging – Selección Óptima
 
@@ -1929,6 +1929,7 @@ Program Headers:
 | Bypass dinámico de checks/licencias             | OllyDbg            |
 
 ---
+***
 
 > **Tip:** Elige **Ghidra** para análisis estático profundo, **IDA Pro** para reversing profesional complejo y **OllyDbg** para debugging interactivo en tiempo real.```
 ---
@@ -1962,7 +1963,7 @@ Program Headers:
   - Busques capturas de red (PCAP) o screenshots de ejecución.
 
 ---
-
+***
 ## 📊 Comparativa Rápida
 
 | Característica          | VirusTotal        | Hybrid Analysis     |

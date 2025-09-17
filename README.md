@@ -1412,7 +1412,7 @@ snow -C -m "secret message" -p password original.txt output.txt
 # Extraer mensaje  
 snow -C -p password output.txt
 ```
-```markdown
+
 # Snow Steganography – Uso en Línea de Comandos
 
 **Synopsis**  
@@ -1897,7 +1897,7 @@ Program Headers:
 
 **Nota:** PT_LOAD siempre es el primer “LOAD” en Program Headers. El campo FileSz/P_Filesz es el que debes anotar para cualquier cálculo adicional de hash o análisis.```
 ***
-```markdown
+
 # 🛠️ Herramientas de Reversing y Debugging – Selección Óptima
 
 ## 🔍 Análisis Estático

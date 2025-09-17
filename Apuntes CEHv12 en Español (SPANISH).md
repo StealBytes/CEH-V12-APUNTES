@@ -890,7 +890,49 @@ xfreerdp /u:usuario /p:password /v:192.168.1.12:3389
 ```
 
 **Buscar la flag (generalmente en C:\):**
+Comandos FreeRDP
+Para conectar y redirigir unidades con FreeRDP, utiliza:
 
+Instalar FreeRDP (si no está instalado)
+
+bash
+sudo apt update
+sudo apt install freerdp2-x11
+Conexión básica a RDP
+
+bash
+xfreerdp /v:10.10.55.17
+Conexión con usuario y contraseña
+
+bash
+xfreerdp /u:Jones /p:Winter2025 /v:10.10.55.17
+Redirigir carpeta local (~/rdp_share) como unidad de disco “shared”
+
+bash
+mkdir -p ~/rdp_share
+xfreerdp /u:Jones /p:Winter2025 /v:10.10.55.17 /drive:shared,~/rdp_share
+Redirigir impresora local
+
+bash
+xfreerdp /u:Jones /p:Winter2025 /v:10.10.55.17 /printer
+Incluir opciones de seguridad RDP (TLS, NLA)
+
+bash
+xfreerdp /u:Jones /p:Winter2025 /v:10.10.55.17 /sec:tls
+xfreerdp /u:Jones /p:Winter2025 /v:10.10.55.17 /sec:nla
+Ajustar resolución de pantalla
+
+bash
+xfreerdp /u:Jones /p:Winter2025 /v:10.10.55.17 /size:1366x768
+Conexión con sonido redirigido
+
+bash
+xfreerdp /u:Jones /p:Winter2025 /v:10.10.55.17 /sound
+Conexión con port forwarding local
+
+bash
+xfreerdp /u:Jones /p:Winter2025 /v:10.10.55.17 /sec:tls +auto-reconnect /microphone:sys:alsa
+Use estos comandos en tus apuntes para gestionar conexiones RDP con FreeRDP, redirigir recursos locales y extraer archivos remotos de forma automática.
 ---
 
 ## NETBIOS (Puertos 137/UDP, 138/UDP, 139/TCP)

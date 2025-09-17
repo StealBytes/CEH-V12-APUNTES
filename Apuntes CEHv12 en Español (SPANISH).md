@@ -1368,7 +1368,40 @@ snow [ -CQS ] [ -p passwd ] [ -l line-length ] [ -f file | -m message ] [ infile
 - Subir imagen para obtener valor CRC32
 - Útil para challenges de integridad
 
+#### Decifrar  hash usando una contraseña previa:
+
+Para usar CyberChef con una contraseña y luego aplicar un hash sigue estos pasos:
+
+Abre CyberChef y limpia la “Recipe” (receta) arrastrando todo lo que haya al cubo de basura.
+
+En la lista de “Operations” busca y añade el paso “Input -> Set Key” (o “Keyed Hash”) si quieres proporcionar una contraseña para cifrado o para un HMAC.
+
+Arrástralo al panel de la derecha, arriba de todo.
+
+En el panel del paso configura tu contraseña en el campo “Key” (por ejemplo, P@ssw0rd123).
+
+A continuación, añade la operación de hash que necesites (por ejemplo, “Crypto -> SHA-256”):
+
+Busca “SHA-256” en “Operations” y arrástralo justo debajo del paso de la clave.
+
+Por defecto no necesita más configuración.
+
+En el panel “Input” (a la derecha) pega el texto o contenido cifrado que quieras procesar.
+
+Verifica que “Auto Bake” esté activado (casilla marcada abajo), o pulsa el botón verde BAKE! para obtener el resultado.
+
+El valor resultante aparecerá en el panel “Output” inmediatamente tras el hash aplicado con tu contraseña.
+
+Ejemplo de receta:
+
+Set Key: P@ssw0rd123
+
+SHA-256
+
+Con “Auto Bake” verás el hash de tu texto usando la contraseña como clave (en esquemas HMAC) o como paso de preparación si fuera un cifrado.
 ---
+
+
 
 ## ⚡ DoS/DDoS TESTING
 
@@ -1390,8 +1423,6 @@ hping3 -d 65536 -S target_ip
 # UDP flood
 hping3 -2 target_ip -p 53 --flood
 ```
-
-⚠️ **IMPORTANTE:** Solo usar en entornos de laboratorio autorizados.
 
 ---
 

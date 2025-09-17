@@ -1861,7 +1861,7 @@ Fuentes y referencias:
 - [Linux Audit - Find Cheat Sheet](https://linux-audit.com/cheat-sheets/find/)  
 - Prácticas CEH v12
 
-  ##### ANALISIS DE EJECUTABLES - MALWARE
+  ##### ANALISIS DE EJECUTABLES - DECOMPILAR -   EJECUTABLES
 ```markdown
 # Ghidra: Localizar y Leer PT_LOAD(0)
 
@@ -1896,3 +1896,38 @@ Program Headers:
 ---
 
 **Nota:** PT_LOAD siempre es el primer “LOAD” en Program Headers. El campo FileSz/P_Filesz es el que debes anotar para cualquier cálculo adicional de hash o análisis.```
+
+```markdown
+# 🛠️ Herramientas de Reversing y Debugging – Selección Óptima
+
+## 🔍 Análisis Estático
+- 🦅 **Ghidra**  
+  • Ideal para: ELF, PE, Mach-O  
+  • Uso: Explorar Program Headers, decompilar funciones, strings, cross-references  
+  • Preguntas típicas: tamaño de segmentos, lógica de funciones, extracción de strings  
+- 🧩 **IDA Pro**  
+  • Ideal para: malware ofuscado, PE avanzado  
+  • Uso: Vista PE, plugins Hex-Rays, scripts IDC/Python  
+  • Preguntas típicas: detección de packers, decrypt routines, anti-debug tricks  
+
+## 🐛 Depuración Dinámica
+- 🐍 **OllyDbg**  
+  • Ideal para: Windows x86  
+  • Uso: breakpoints, patching en vivo, inspección de registros/memoria  
+  • Preguntas típicas: bypass de login, análisis de flujo en runtime, API calls  
+
+## ⚖️ Resumen de Casos de Uso
+
+| 🔖 Caso de Pregunta                             | ⚙️ Herramienta     |
+|-------------------------------------------------|--------------------|
+| Obtener `p_filesz` en PT_LOAD(0)                | Ghidra             |
+| Extraer estructuras de PE / secciones           | IDA Pro            |
+| Decompilar para entender lógica                 | Ghidra / IDA Pro   |
+| Detectar y desempaquetar malware ofuscado       | IDA Pro            |
+| Leer cadenas y referencias rápidamente          | Ghidra             |
+| Depuración y patching en tiempo real            | OllyDbg            |
+| Bypass dinámico de checks/licencias             | OllyDbg            |
+
+---
+
+> **Tip:** Elige **Ghidra** para análisis estático profundo, **IDA Pro** para reversing profesional complejo y **OllyDbg** para debugging interactivo en tiempo real.```

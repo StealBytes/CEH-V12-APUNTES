@@ -570,56 +570,62 @@ IP Address       MAC Address       Count     Len  MAC Vendor / Hostname
 ---
 ## LDAP Enumeration
 
-🔍 **1. Descubrir hosts con LDAP (puerto 389)**  
-```bash
+¿Cuándo usar cada comando LDAP?
+🔍 1. Descubrir hosts con LDAP (puerto 389)
+Usa este comando al inicio de la fase de reconocimiento para encontrar qué máquinas ofrecen servicios LDAP en la red.
+
+bash
 nmap -p 389 --open -sV 192.168.1.0/24
-```
+📖 2. Consultar Root DSE (Directorio raíz)
+Empléalo inmediatamente después de localizar un host LDAP para extraer información básica del dominio sin necesidad de autenticación. Te muestra los naming contexts.
 
-📖 **2. Consultar Root DSE (Directorio raíz)**  
-```bash
-ldapsearch -x -h <IP_DC> -s base -b "" namingContexts defaultNamingContext rootDomainNamingContext
-```
+bash
+ldapsearch -x -h <IP_DC> -s base -b "" \
+  namingContexts defaultNamingContext rootDomainNamingContext
+🗂️ 3. Obtener contexto de dominio y esquema
+Úsalo para mapear la estructura de Active Directory:
 
-🗂️ **3. Obtener contexto de dominio y esquema**  
-```bash
+defaultNamingContext te da el DN del dominio
+
+schemaNamingContext te da el DN del esquema
+
+bash
 ldapsearch -x -h <IP_DC> \
   -b "" defaultNamingContext schemaNamingContext
-```
+👤 4. Enumerar usuarios del dominio
+Aplica este comando cuando necesites listar todas las cuentas de usuario del dominio, útil en la fase de enumeración para identificar objetivos.
 
-👤 **4. Enumerar usuarios del dominio**  
-```bash
+bash
 ldapsearch -x -h <IP_DC> \
   -b "DC=domain,DC=com" "(objectClass=user)" \
   sAMAccountName displayName
-```
+👥 5. Enumerar grupos del dominio
+Empléalo para descubrir los grupos existentes y sus miembros, clave para planificar movimientos laterales y privilegios.
 
-👥 **5. Enumerar grupos del dominio**  
-```bash
+bash
 ldapsearch -x -h <IP_DC> \
   -b "DC=domain,DC=com" "(objectClass=group)" \
   cn member
-```
+🖥️ 6. Enumerar controladores de dominio (sitios AD)
+Úsalo para identificar en qué sitios de Active Directory están registrados los DCs, esencial en entornos distribuidos.
 
-🖥️ **6. Enumerar controladores de dominio (sitios AD)**  
-```bash
+bash
 ldapsearch -x -h <IP_DC> \
   -b "CN=Sites,CN=Configuration,DC=domain,DC=com" objectClass=site
-```
+⚙️ 7. Extraer versión del controlador de dominio
+Ejecuta este comando para determinar el nivel funcional y la versión del DC, necesario para elegir exploits específicos.
 
-⚙️ **7. Extraer versión del controlador de dominio**  
-```bash
+bash
 ldapsearch -x -h <IP_DC> \
   -b "" supportedLDAPVersion msDS-Behavior-Version
-```
+📂 8. Dump completo de un contenedor (Users)
+Recurre a este comando cuando tengas credenciales de usuario válidas y necesites un volcado completo de objetos (por ejemplo, cuentas de usuario).
 
-📂 **8. Dump completo de un contenedor (Users)**  
-```bash
+bash
 ldapsearch -x -h <IP_DC> \
   -D "domain\\user" -W \
   -b "CN=Users,DC=domain,DC=com" "(objectClass=*)"
-```
-
-> **Tip:** Reemplaza `<IP_DC>` y `domain,DC=com` con los valores reales de tu entorno.
+Tip: Reemplaza <IP_DC> y domain,DC=com con los valores reales de tu entorno antes de ejecutar.
 ## 📁 SMB/NETBIOS ENUMERATION
 
 ### Puertos Objetivo

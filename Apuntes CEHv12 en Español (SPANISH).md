@@ -29,7 +29,7 @@
 ---
 
 ### DNS Reconnaissance
-**Objetivo:** Enumerar registros DNS y obtener mapeo completo de la infraestructura del dominio.
+**Objetivo:** Enumerar registros DNS y obtener mapeo completo de la infraestructura del dominio. Emcontrando incluso subdominios, servidores de correos y otros...
 
 **Entorno:** Parrot OS
 

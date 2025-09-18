@@ -1982,7 +1982,10 @@ Program Headers:
 - 🐍 **OllyDbg**  
   • Ideal para: Windows x86  
   • Uso: breakpoints, patching en vivo, inspección de registros/memoria  
-  • Preguntas típicas: bypass de login, análisis de flujo en runtime, API calls  
+  • Preguntas típicas: bypass de login, análisis de flujo en runtime, API calls
+## 🐛 DIE (Detect It Easy)
+
+> sirve para analizar archivos ELF
 
 ## ⚖️ Resumen de Casos de Uso
 
@@ -2097,6 +2100,48 @@ Detecta hosts con servicio activo en puerto 4000.
 - En caso de práctica, probar acceso con cliente njRAT/JPS al host que responde en el puerto correspondiente.
 
 ```
+# 🌐 Apuntes: Uso de TCPView en Análisis Dinámico de Malware
 
+## 🛠️ ¿Qué es TCPView?
+- Herramienta de Sysinternals para Windows.
+- Permite visualizar todos los endpoints (puertos) TCP y UDP abiertos, escuchando o con conexiones establecidas.
+- Muestra el proceso asociado a cada conexión o puerto.
+
+---
+
+## ⚡ Ventajas para análisis dinámico
+- Útil para monitorear procesos sospechosos tras ejecutar malware en un entorno controlado.
+- Permite identificar nuevos puertos abiertos por el malware.
+- Ayuda a detectar conexiones salientes (C2, descarga de payloads, filtrado de datos).
+- Puedes cerrar conexiones manualmente desde la aplicación.
+
+---
+
+## 👀 ¿Cómo usarlo?
+1. Ejecuta el malware en laboratorio (sandbox/VM).
+2. Abre TCPView y observa los procesos y puertos activos.
+3. Fíjate en nuevos procesos o puertos en estado *LISTENING* o *ESTABLISHED*.
+4. Revisa direcciones locales/remotas asociadas a procesos sospechosos.
+5. Si detectas una comunicación relevante, usa Wireshark para analizar tráfico.
+
+---
+
+## 🚩 Preguntas que puedes resolver con TCPView
+- ¿Qué puertos ha abierto el malware tras ejecutarse?
+- ¿Qué procesos están escuchando conexiones externas?
+- ¿Qué IPs remotas se están contactando desde la máquina víctima?
+- ¿Qué procesos mantienen conexiones persistentes tras la infección?
+- ¿Se ha levantado algún servicio tipo backdoor al ejecutar el binario? (LISTENING en puertos altos o inusuales)
+
+---
+
+## 🔔 Detección práctica
+- **Si ves un proceso nuevo escuchando en un puerto extraño tras ejecutar malware, es sospechoso.**
+- **Si detectas conexiones establecidas con IPs públicas, podrías estar ante un C2.**
+- Comprueba frecuentemente tras cada ejecución o reinicio.
+
+---
+
+> **Tip:** Complementa TCPView con Process Explorer y Wireshark para un análisis de malware más profundo.
 
 

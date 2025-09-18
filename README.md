@@ -7,7 +7,172 @@
 > - Examen de "libro abierto" con acceso a internet desde el host
 
 ---
+### FUZZING WEB
+# 🌐 Apuntes: Fuzzing Web con Gobuster
 
+## 📂 Directory Fuzzing (Enumeración de directorios)
+
+gobuster dir -u https://ejemplo.com/
+-w /usr/share/Seclist/Discovery/Web-Content/directory-list-2.3-medium.txt
+-t 200 --add-slash
+
+text
+
+### Parámetros explicados:
+- `dir`: Modo de enumeración de directorios
+- `-u`: URL objetivo
+- `-w`: Wordlist a usar (diccionario de directorios)
+- `-t 200`: Número de threads (hilos) para acelerar el proceso
+- `--add-slash`: Añade "/" al final de cada directorio encontrado
+
+---
+
+## 🌍 Virtual Host Fuzzing (Enumeración de subdominios)
+
+gobuster vhost -u https://dominio.com
+-w /usr/share/Seclist/Discovery/DNS/subdomains-topmillion-110000.txt
+-t 200
+
+text
+
+### Parámetros explicados:
+- `vhost`: Modo de enumeración de virtual hosts
+- `-u`: URL del dominio principal
+- `-w`: Wordlist de subdominios
+- `-t 200`: Hilos concurrentes para búsqueda rápida
+
+---
+
+## ⚙️ Otros modos útiles de Gobuster
+
+### Fuzz Mode (Fuzzing de parámetros)
+gobuster fuzz -u http://xxx.xxx/file/system.php?FUZZ=id
+-w /usr/share/Seclist/Discovery/WebContent/directory-list-2.3-medium.txt
+-b 404,400 --exclude-length 0
+
+text
+- Busca parámetros válidos en URLs
+- `-b 404,400`: Excluye códigos de estado específicos
+- `--exclude-length 0`: Excluye respuestas de longitud 0
+
+---
+
+## 💡 Tips para uso efectivo
+
+### Filtros comunes:
+- `-s 200`: Solo mostrar códigos 200 (éxito)
+- `-b 404,403`: Excluir códigos 404 y 403
+- `-x php,html,txt`: Buscar extensiones específicas
+
+### Wordlists recomendadas:
+- **Directorios**: `directory-list-2.3-medium.txt`
+- **Subdominios**: `subdomains-topmillion-110000.txt`
+- **Archivos**: `common.txt`, `big.txt`
+
+### Ejemplo con extensiones:
+gobuster dir -u http://target.com -w wordlist.txt -x php,html,txt -t 100
+# 🌐 Apuntes: Sublist3r - Enumeración de Subdominios
+
+## 📝 ¿Qué es Sublist3r?
+- Herramienta Python para enumerar subdominios usando OSINT.
+- Utiliza múltiples motores de búsqueda: Google, Yahoo, Bing, Baidu, Ask.
+- También consulta: Netcraft, VirusTotal, ThreatCrowd, DNSdumpster, ReverseDNS.
+- Integra **subbrute** para fuerza bruta con wordlists mejoradas.
+
+---
+
+## ⚙️ Instalación
+git clone https://github.com/aboul3la/Sublist3r.git
+cd Sublist3r
+sudo pip install -r requirements.txt
+
+text
+
+### Dependencias necesarias:
+- `requests`
+- `dnspython` 
+- `argparse`
+
+---
+
+## 🚀 Uso básico
+
+### Enumeración simple:
+python sublist3r.py -d ejemplo.com
+
+text
+
+### Con modo verbose (tiempo real):
+python sublist3r.py -v -d ejemplo.com
+
+text
+
+### Con fuerza bruta habilitada:
+python sublist3r.py -b -d ejemplo.com
+
+text
+
+### Escanear puertos específicos:
+python sublist3r.py -d ejemplo.com -p 80,443
+
+text
+
+### Motores específicos:
+python sublist3r.py -e google,yahoo,virustotal -d ejemplo.com
+
+text
+
+### Guardar resultados:
+python sublist3r.py -d ejemplo.com -o subdominios.txt
+
+text
+
+---
+
+## 🔧 Parámetros principales
+
+| Parámetro | Descripción |
+|-----------|-------------|
+| `-d` | Dominio objetivo |
+| `-b` | Habilitar módulo de fuerza bruta |
+| `-p` | Escanear puertos TCP específicos |
+| `-v` | Modo verbose (resultados en tiempo real) |
+| `-t` | Número de threads para fuerza bruta |
+| `-e` | Motores específicos (separados por comas) |
+| `-o` | Guardar resultados en archivo |
+
+---
+
+## 💡 Tips para CEH
+
+### Complementar con otras herramientas:
+Después de Sublist3r, usar gobuster para directorios
+gobuster dir -u http://subdominio.encontrado.com -w wordlist.txt
+
+O usar con nmap para escanear servicios
+nmap -sV -p- subdominios_encontrados.txt
+
+text
+
+### Usar en scripts Python:
+import sublist3r
+subdomains = sublist3r.main('ejemplo.com', 40, 'resultados.txt',
+ports=None, silent=False, verbose=False,
+enable_bruteforce=True, engines=None)
+
+text
+
+---
+
+## 🎯 Casos de uso en examen CEH
+- **Reconocimiento pasivo**: Encontrar superficie de ataque de un dominio
+- **Descubrimiento de assets**: Identificar subdominios no documentados
+- **Preparación para pentesting**: Mapear la infraestructura objetivo
+- **Combinación con otras herramientas**: Entrada para Gobuster, Nmap, etc.
+
+---
+
+> **Nota**: Sublist3r es ideal para la fase de reconocimiento inicial. Combínalo con herram
 ## 🔍 FOOTPRINTING & RECONNAISSANCE
 
 ## GOOGLE DORK

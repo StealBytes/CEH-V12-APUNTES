@@ -10,6 +10,10 @@
 
 ## 🔍 FOOTPRINTING & RECONNAISSANCE
 
+## GOOGLE DORK
+
+https://dorksearch.com/
+
 ### Análisis de Certificados SSL/TLS
 **Objetivo:** Descubrir subdominios y CN/SAN alternativos para ampliar la superficie de ataque.
 

@@ -2313,4 +2313,6 @@ Detecta hosts con servicio activo en puerto 4000.
 
 > **Tip:** Complementa TCPView con Process Explorer y Wireshark para un análisis de malware más profundo.
 
+### REVERSE SHELL
 
+https://www.revshells.com/

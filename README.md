@@ -1554,6 +1554,124 @@ Para desencriptar con una contraseña:
 
 #### STEGANOGRAFÍA
 
+# 🔐 Apuntes: BCTextEncoder - Desencriptación de Texto
+
+## 🔍 Palabras Clave para Búsqueda en Examen
+- **BCTextEncoder**
+- **BestCrypt**
+- **Text Encoder** 
+- **Decode/Decrypt**
+- **Password-based decryption**
+- **Public key decryption**
+- **AES encryption**
+- **RSA encryption**
+- **BASE64 encoded text**
+
+---
+
+## 🎯 Cuándo usar BCTextEncoder
+
+### Escenarios típicos en CEH:
+- Encontrar texto cifrado con formato específico (BEGIN/END ENCODED MESSAGE)
+- Descifrar mensajes protegidos por contraseña
+- Trabajar con claves públicas/privadas para descifrado
+- Analizar texto comprimido y cifrado
+
+### Señales de que necesitas BCTextEncoder:
+-----BEGIN ENCODED MESSAGE-----
+Version: BC Text Encoder Utility v. 1.00.0 (beta)
+[texto codificado en BASE64]
+-----END ENCODED MESSAGE-----
+
+text
+
+---
+
+## 🚀 Proceso de Desencriptación
+
+### 1. **Desencriptación por contraseña:**
+Copiar texto encriptado al clipboard
+
+Abrir BCTextEncoder (hotkey por defecto)
+
+El texto se detecta automáticamente si "Automatically decode encoded text" está habilitado
+
+Ingresar contraseña cuando se solicite
+
+Ver texto desencriptado en panel "Plain Text"
+
+text
+
+### 2. **Desencriptación con clave privada:**
+Asegurar que tienes la clave privada correspondiente
+
+Pegar texto encriptado en panel "Encoded Text"
+
+Click botón [Decode]
+
+Seleccionar clave privada apropiada
+
+Ingresar contraseña de la clave privada
+
+text
+
+---
+
+## ⚙️ Comandos y Funciones Principales
+
+### Operaciones de archivo:
+- **File → Open**: Abrir archivo con texto encriptado
+- **File → Save**: Guardar texto desencriptado
+
+### Operaciones de clipboard:
+- **Edit → Paste from Clipboard**: Pegar texto encriptado
+- **Edit → Copy to Clipboard**: Copiar texto desencriptado
+
+### Gestión de claves:
+- **Key → Manage Key Database**: Administrar claves públicas/privadas
+- **Key → Choose public key**: Seleccionar clave para operaciones
+
+---
+
+## 🔧 Algoritmos Soportados
+
+- **Compresión**: ZLIB
+- **Cifrado simétrico**: AES (Rijndael) con clave 256-bit
+- **Cifrado asimétrico**: RSA
+- **Codificación**: BASE64
+
+---
+
+## 💡 Tips para Examen CEH
+
+### Identificación rápida:
+- Buscar encabezados `-----BEGIN ENCODED MESSAGE-----`
+- Verificar versión en segunda línea
+- Texto en BASE64 entre encabezados
+
+### Estrategia de desencriptación:
+1. **Primero**: Intentar desencriptación automática
+2. **Si falla**: Buscar contraseñas comunes (password, admin, 123456)
+3. **Para claves públicas**: Verificar si hay archivos .p12 o .pfx disponibles
+4. **Compatibilidad PGP**: BCTextEncoder puede leer mensajes PGP
+
+### Opciones útiles:
+- Habilitar "Copy decoded text to clipboard after decoding"
+- Usar "Automatically decode encoded text" para eficiencia
+- Verificar que Assistant esté corriendo para hotkeys
+
+---
+
+## 🚨 Formatos de Entrada Reconocidos
+- Archivos .txt con texto BCTextEncoder
+- Mensajes PGP compatibles
+- Claves en formato PKCS-12/X.509
+- Texto copiado desde email o documentos
+
+---
+
+> **Nota crucial**: BCTextEncoder es ideal cuando encuentres texto con los marcadores específicos BEGIN/END ENCODED MESSAGE. Si ves este formato, es la herramienta correcta para desencriptar.
+
 ##### OPENSTEGO
 **Objetivo:** Ocultar/extraer datos en imágenes.
 - **Embed:** Ocultar archivo en imagen

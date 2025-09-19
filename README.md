@@ -2239,9 +2239,190 @@ snow [ -CQS ] [ -p passwd ] [ -l line-length ] [ -f file | -m message ] [ infile
 4. **Ver capacidad de ocultación**  
    ```
    snow -S -l 72 infile.txt
+
    ```
 ```
+ 🕵️ Apuntes: Steghide - Herramienta de Esteganografía
 
+## 📝 ¿Qué es Steghide?
+- Herramienta de esteganografía para ocultar archivos dentro de imágenes o audio
+- **Algoritmo por defecto**: Rijndael (AES) con clave de 128 bits
+- **Formatos soportados**: BMP, JPEG, PNG, GIF (imágenes) | WAV, AU (audio)
+- Protección con contraseña incluida
+
+---
+
+## 🔧 Instalación y Configuración
+
+### **Linux:**
+apt-get install steghide
+
+text
+
+### **Windows:**
+- Descargar desde: `http://steghide.sourceforge.net/download.php`
+- Descomprimir y usar desde CMD
+
+### **Comando de ayuda:**
+steghide --help
+
+text
+
+---
+
+## 📋 Comandos Principales
+
+### **1. Ocultar/Embeber Archivo**
+steghide embed -ef archivo_secreto.txt -cf imagen_cover.jpg
+
+text
+- `-ef` = embedded file (archivo a ocultar)
+- `-cf` = cover file (archivo de cobertura)
+- **Solicitará contraseña** para proteger el archivo oculto
+
+### **2. Extraer Archivo Oculto**
+steghide extract -sf imagen_con_secreto.jpg
+
+text
+- `-sf` = secret file (archivo que contiene datos ocultos)
+- **Solicitará contraseña** para extraer
+
+### **3. Información sobre Archivo**
+steghide info imagen_sospechosa.jpg
+
+text
+**Muestra:**
+- Si contiene datos ocultos
+- Algoritmo de cifrado utilizado
+- Información de compresión
+
+---
+
+## ⚙️ Opciones Avanzadas
+
+### **Especificar Contraseña en Comando**
+steghide embed -ef secreto.txt -cf imagen.jpg -p "mi_password"
+
+text
+
+### **Modo Verbose (información detallada)**
+steghide embed -v -ef secreto.txt -cf imagen.jpg
+
+text
+
+### **Compresión de Datos (niveles 1-9)**
+steghide embed -ef secreto.txt -cf imagen.jpg -z 5
+
+text
+- `1` = máxima velocidad
+- `9` = máxima compresión
+
+### **Sin Compresión**
+steghide embed -ef secreto.txt -cf imagen.jpg -Z
+
+text
+
+### **Ocultar sin Nombre de Archivo**
+steghide embed -ef secreto.txt -cf imagen.jpg -N
+
+text
+
+### **Especificar Algoritmo de Cifrado**
+steghide embed -ef secreto.txt -cf imagen.jpg -e cast-128
+
+text
+
+### **Sobrescribir Archivo Existente**
+steghide extract -sf imagen.jpg -f
+
+text
+
+---
+
+## 💡 Tips para Examen CEH
+
+### **Detección de Esteganografía:**
+1. **Verificar si hay datos ocultos:**
+steghide info imagen_sospechosa.jpg
+
+text
+
+2. **Si pide contraseña**, intentar contraseñas comunes:
+- (vacía)
+- `password`
+- `123456`
+- `admin`
+- `steghide`
+
+3. **Extraer sin saber contraseña** (usar herramientas como `stegcracker`):
+stegcracker imagen.jpg wordlist.txt
+
+text
+
+### **Palabras clave para buscar en examen:**
+- **Steganography**
+- **Hidden files**
+- **Image analysis**
+- **Data hiding**
+- **Extract embedded**
+
+### **Flujo de trabajo típico:**
+1. **Identificar archivo sospechoso** (imagen/audio)
+2. **Verificar con info** si contiene datos ocultos
+3. **Intentar extracción** con contraseñas comunes
+4. **Analizar contenido extraído** para pistas adicionales
+
+---
+
+## 🚨 Casos de Uso en CEH
+
+### **Escenario 1: Encontrar información oculta**
+Verificar si la imagen contiene datos
+steghide info evidence.jpg
+
+Si confirma datos ocultos, intentar extraer
+steghide extract -sf evidence.jpg
+
+Revisar archivo extraído
+cat extracted_file.txt
+
+text
+
+### **Escenario 2: Crear archivo con datos ocultos**
+Crear archivo de texto con información sensible
+echo "Database password: admin123" > secret.txt
+
+Ocultarlo en imagen
+steghide embed -ef secret.txt -cf normal_photo.jpg -p "password"
+
+Verificar que está oculto
+steghide info normal_photo.jpg
+
+text
+
+---
+
+## 🔍 Algoritmos Soportados
+- **Rijndael (AES)** - Por defecto
+- **Cast-128**
+- **Gost**
+- **Rijndael-192**
+- **Rijndael-256**
+- **Saferplus**
+
+---
+
+## 📊 Formatos de Archivo Soportados
+
+| Tipo | Formatos Soportados |
+|------|-------------------|
+| **Imágenes** | BMP, JPEG, PNG, GIF |
+| **Audio** | WAV, AU |
+| **Para ocultar** | Cualquier tipo de archivo |
+
+---
+
+> **Tip crucial**: Steghide es muy común en exámenes CEH. Siempre verifica imágenes sospechosas
 #### CRC32 Analysis
 **Herramienta Online:** `https://emn178.github.io/online-tools/crc/`
 - Subir imagen para obtener valor CRC32
@@ -2284,6 +2465,8 @@ Si no funciona AES, prueba:
 
 Las opciones de "key" que muestras en la imagen son para generar claves criptográficas, no para usar una contraseña existente para descifrar.
 ---
+
+
 
 
 

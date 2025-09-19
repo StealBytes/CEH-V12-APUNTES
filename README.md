@@ -826,7 +826,172 @@ user:[administrator] rid:[0x1f4]
 \\target_ip\C$        [E] Default share  
 \\target_ip\IPC$      IPC    IPC Service
 ```
+# 🔍 Apuntes: Enumeración con Enum4linux
 
+## 📋 Comandos Básicos de Enum4linux
+
+### **1. Enumerar Lista de Usuarios (-U)**
+enum4linux -u john -p password123 -U 192.168.1.100
+
+text
+**¿Qué obtienes?**
+- Lista completa de usuarios del sistema
+- SIDs (Security Identifiers) asociados
+- Información de cuentas activas/inactivas
+
+**Ejemplo de salida:**
+[+] Getting local users:
+user:[Administrator] rid:[0x1f4]
+user:[Guest] rid:[0x1f5]
+user:[john] rid:[0x3e8]
+user:[alice] rid:[0x3e9]
+
+text
+
+---
+
+### **2. Detalles del Sistema Operativo (-o)**
+enum4linux -u john -p password123 -o 192.168.1.100
+
+text
+**¿Qué obtienes?**
+- Versión exacta del OS (Windows Server 2019, Ubuntu 20.04, etc.)
+- Service Pack instalados
+- Arquitectura (32/64 bits)
+- Domain/Workgroup información
+
+**Ejemplo de salida:**
+[+] OS information on 192.168.1.100:
+[+] OS: Windows Server 2019 Standard 17763
+[+] Domain: CORPORATE
+[+] Server Type: Windows NT Server
+
+text
+
+---
+
+### **3. Política de Contraseñas (-P)**
+enum4linux -u john -p password123 -P 192.168.1.100
+
+text
+**¿Qué obtienes?**
+- Longitud mínima de contraseña
+- Complejidad requerida
+- Tiempo de expiración
+- Intentos de login permitidos
+- Duración de bloqueo
+
+**Ejemplo de salida:**
+[+] Password Policy:
+[+] Minimum password length: 8
+[+] Password history length: 12
+[+] Maximum password age: 90 days
+[+] Password must meet complexity requirements
+[+] Lockout threshold: 5 attempts
+
+text
+
+---
+
+### **4. Información de Grupos (-G)**
+enum4linux -u john -p password123 -G 192.168.1.100
+
+text
+**¿Qué obtienes?**
+- Grupos locales y de dominio
+- Membresía de usuarios
+- Privilegios de grupos
+- Grupos administrativos
+
+**Ejemplo de salida:**
+[+] Groups on 192.168.1.100:
+group:[Administrators] rid:[0x220]
+group:[Users] rid:[0x221]
+group:[Domain Admins] rid:[0x200]
+group:[IT Support] rid:[0x3ea]
+
+text
+
+---
+
+### **5. Recursos Compartidos (-S)**
+enum4linux -u john -p password123 -S 192.168.1.100
+
+text
+**¿Qué obtienes?**
+- Carpetas compartidas disponibles
+- Permisos de acceso (Read/Write)
+- Recursos administrativos ocultos (C$, ADMIN$)
+- Información de impresoras compartidas
+
+**Ejemplo de salida:**
+[+] Share Enumeration on 192.168.1.100:
+[+] Sharename: ADMIN$ Type: Disk
+[+] Sharename: C$ Type: Disk
+[+] Sharename: Documents Type: Disk
+[+] Sharename: Printer1 Type: Printer
+
+text
+
+---
+
+## 🔧 Comandos Combinados y Adicionales
+
+### **Enumeración completa en un solo comando:**
+enum4linux -u john -p password123 -a 192.168.1.100
+
+text
+*(-a = all, incluye todas las opciones anteriores)*
+
+### **Sin credenciales (null session):**
+enum4linux -a 192.168.1.100
+
+text
+
+### **Con archivo de credenciales:**
+enum4linux -u john -p password123 -k users.txt 192.168.1.100
+
+text
+
+---
+
+## 💡 Tips para Examen CEH
+
+### **Flujo de trabajo recomendado:**
+1. **Primero**: Intentar sin credenciales `enum4linux -a IP`
+2. **Si falla**: Usar credenciales válidas encontradas previamente
+3. **Enfocarse en**: `-U` (usuarios) y `-S` (shares) para acceso inicial
+4. **Después**: `-P` (password policy) para planificar ataques
+5. **Finalmente**: `-G` (grupos) para escalación de privilegios
+
+### **Credenciales comunes para probar:**
+- `guest:` (sin password)
+- `admin:admin`
+- `administrator:password`
+- `test:test`
+
+### **Información crítica a buscar:**
+- **Usuarios**: Cuentas de servicio, administradores
+- **Shares**: Carpetas con permisos de escritura
+- **Password Policy**: Para ataques de fuerza bruta
+- **Grupos**: Identificar grupos privilegiados
+
+---
+
+## 🚨 Casos de Uso Específicos
+
+### **Para Active Directory:**
+enum4linux -u domain\john -p password123 -a DC_IP
+
+text
+
+### **Para servidores Samba/Linux:**
+enum4linux -u smbuser -p smbpass -a LINUX_IP
+
+text
+
+### **Para enumerar RIDs (fuerza bruta de usuarios):**
+enum4linux -u john -p password123 -r 192.168.1.100
 #### SMBCLIENT
 ```bash
 # Listar shares sin autenticación

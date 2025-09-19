@@ -3568,3 +3568,9 @@ text
 ---
 
 > **Tip crucial**: Siempre realizar análisis en ambiente aislado (VM) y tomar snapshots antes
+
+
+#### SI ESTAS PERDIDO:
+https://chirag-singla.notion.site/Module-15-SQL-Injection-6907bdc0e911489089ebc81d18658dc1
+https://github.com/Samsar4/Ethical-Hacking-Labs?tab=readme-ov-file
+https://github.com/System-CTL/CEH_CHEAT_SHEET

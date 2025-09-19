@@ -3104,3 +3104,284 @@ Detecta hosts con servicio activo en puerto 4000.
 ### REVERSE SHELL
 
 https://www.revshells.com/
+
+# 🦠 Apuntes: Análisis de Virus y Malware - Herramientas Especializadas
+
+## 🔬 1. Análisis de Virus con IDA Pro
+
+### **Pasos básicos en IDA:**
+Ejecutar: idademo73_windows.exe
+
+New → Viruses$$sample]\malware.exe
+(ej: Klez Virus Live!\face.exe)
+
+IDA Pro Analysis → esperar análisis automático
+
+text
+
+### **Vistas principales para análisis:**
+View → Graphs → Flow Chart
+
+Muestra flujo de ejecución del programa
+
+Identifica funciones maliciosas
+
+Visualiza saltos condicionales
+
+View → Graphs → Function Calls
+
+Mapa de llamadas a funciones
+
+APIs de Windows utilizadas
+
+Dependencias entre funciones
+
+Windows → Hex View-1
+
+Vista hexadecimal del binario
+
+Strings y datos hardcodeados
+
+Análisis de estructuras de datos
+
+Windows → Structures
+
+Estructuras de datos definidas
+
+Headers de archivos PE
+
+Información de imports/exports
+
+text
+
+---
+
+## 🐛 2. Análisis Dinámico con OllyDbg
+
+### **Workflow básico:**
+Ejecutar: OLLYDBG.EXE (como administrador)
+
+Open → \Viruses\malware_sample.exe
+(ej: tini.exe)
+
+F9 para ejecutar hasta breakpoint
+
+text
+
+### **Vistas de análisis:**
+View → Log
+
+Registro de todas las acciones del debugger
+
+APIs llamadas durante ejecución
+
+Mensajes de error y warnings
+
+View → Executable module
+
+Información del módulo principal
+
+Secciones del PE (.text, .data, .rdata)
+
+Entry point y direcciones importantes
+
+View → Memory
+
+Mapa de memoria del proceso
+
+Regiones allocadas/liberadas
+
+Detección de shellcode inyectado
+
+View → Threads
+
+Hilos de ejecución activos
+
+IDs y estados de threads
+
+Detección de técnicas anti-debug
+
+text
+
+---
+
+## 🕵️ 3. Detección de Trojans
+
+### **TCPView (tcpview.exe):**
+Función: Analizar conexiones TCP/UDP activas
+Buscar:
+
+Conexiones sospechosas a IPs externas
+
+Puertos no estándar en LISTENING
+
+Procesos desconocidos con conexiones de red
+
+text
+
+### **Autoruns (autoruns.exe):**
+Función: Mostrar programas de inicio automático
+Analizar:
+
+Procesos en startup
+
+DLLs cargadas automáticamente
+
+Servicios sospechosos
+
+Entradas de registro maliciosas
+
+text
+
+### **jv16 PowerTools:**
+Ejecutar con interfaz completa
+
+Clean and Speedup My Computer
+
+Check Registry Errors & fix by deleting
+
+Main Tools → Control which programs start automatically
+
+Restart computer after cleanup
+
+text
+
+---
+
+## 🌐 4. Monitoreo de Conexiones TCP/IP con CurrPorts
+
+### **Escenario de prueba con njRAT:**
+Windows Server 2016:
+
+njRAT v0.7d.exe → configurar puerto → Start
+
+Builder → Host IP → ✅ Copy To StartUp
+→ ✅ Registry StartUp → Build (Test.exe)
+
+Compartir Test.exe con víctima
+
+Windows 10 (víctima):
+
+Ejecutar Test.exe recibido
+
+CurrPorts (cports.exe) → observar conexiones
+
+Buscar proceso sospechoso "server.exe" en puerto 5552
+
+Kill Processes Of Selected Ports
+O Close Selected TCP Connections
+
+text
+
+### **Indicadores a buscar en CurrPorts:**
+- Procesos con nombres genéricos (server.exe, svchost.exe falso)
+- Conexiones salientes a IPs desconocidas
+- Puertos no estándar (5552, 4444, 8080)
+- Múltiples conexiones del mismo proceso
+
+---
+
+## 🧹 5. Remoción de Malware con ClamWin
+
+### **Procedimiento:**
+Instalar ClamWin
+❌ Desmarcar: "Download virus database file"
+
+Ejecutar Memory Scan para análisis en vivo
+
+Scan C:\ para análisis completo del disco
+
+Cuarentenar o eliminar archivos detectados
+
+text
+
+---
+
+## 📋 6. Monitoreo de Registro con Regshot
+
+### **Análisis de cambios de registro:**
+Regshot-x64-Unicode.exe → Run as administrator
+
+1st Shot → Shot and Save (estado inicial)
+
+Instalar aplicación sospechosa (ej: HashTool)
+
+2nd shot → Shot and Save (estado final)
+
+Compare → generar reporte HTML
+
+text
+
+### **Cambios importantes a revisar:**
+- Nuevas claves en `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run`
+- Modificaciones en `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`
+- Cambios en configuración de servicios
+- Nuevos archivos en directorios del sistema
+
+---
+
+## 🛡️ 7. Monitoreo de Startup con WinPatrol
+
+### **Instalación y uso:**
+Instalar WinPatrol
+✅ Marcar: "Start the application"
+
+Ejecutar como administrador
+
+text
+
+### **Secciones a monitorear:**
+Startup Programs:
+
+Programas que se ejecutan al inicio
+
+Ubicación en registro o carpetas de startup
+
+IE Helpers:
+
+Toolbars y extensiones de navegador
+
+Links y redirects sospechosos
+
+Services:
+
+Servicios de Windows activos
+
+Servicios con nombres sospechosos
+
+File Types:
+
+Asociaciones de archivos
+
+Info → Expand Info para detalles
+
+Active Tasks:
+
+Tareas en ejecución actual
+
+Procesos padre e hijos
+
+text
+
+---
+
+## 💡 Tips para Examen CEH
+
+### **Flujo de análisis recomendado:**
+1. **Análisis estático**: IDA Pro para entender código
+2. **Análisis dinámico**: OllyDbg para observar ejecución
+3. **Detección de red**: TCPView/CurrPorts para conexiones
+4. **Análisis de persistencia**: Autoruns/WinPatrol para startup
+5. **Limpieza**: ClamWin para remoción
+6. **Forense**: Regshot para cambios en sistema
+
+### **Indicadores clave de malware:**
+- **Red**: Conexiones a IPs sospechosas en puertos no estándar
+- **Archivos**: Ejecutables en %TEMP%, %APPDATA%
+- **Registro**: Nuevas entradas en claves de startup
+- **Procesos**: Nombres genéricos o procesos huérfanos
+- **Comportamiento**: Modificaciones no autorizadas al sistema
+
+---
+
+> **Tip crucial**: Siempre realizar análisis en ambiente aislado (VM) y tomar snapshots antes

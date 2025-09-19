@@ -2327,6 +2327,183 @@ hping3 -2 target_ip -p 53 --flood
 - **Basic Network Scan:** Detección general
 - **Advanced Scan:** Personalizable
 - **Web Application Tests:** Específico para web
+# 🔍 Apuntes: Análisis de Vulnerabilidades con Nessus
+
+## 🌐 Acceso y Configuración Inicial
+
+### **Acceso a la interfaz web:**
+URL: https://localhost:8834
+Usuario: admin
+Contraseña: password
+
+text
+
+---
+
+## 📋 Creación de Política Personalizada (Advanced Scan)
+
+### **Paso 1: Crear Nueva Política**
+Policies → Create a new policy
+Policy Templates → Advanced Scan
+
+text
+
+### **Paso 2: Configuración Host Discovery**
+Settings → DISCOVERY → Host Discovery
+❌ Desactivar: "Ping the remote host" (switch a la izquierda)
+
+text
+**Propósito:** Evitar detección por firewalls que bloquean ICMP
+
+### **Paso 3: Configuración Port Scanning**
+Settings → DISCOVERY → Port Scanning
+✅ Activar: "Verify open TCP ports found by local port enumerators"
+
+text
+**Propósito:** Confirmación doble de puertos abiertos
+
+### **Paso 4: Configuración Advanced**
+Settings → ADVANCED → Policy General Settings
+
+Max number of TCP sessions per host: unlimited
+
+Max number of TCP sessions per scan: unlimited
+
+text
+**Propósito:** Maximizar velocidad y cobertura del escaneo
+
+---
+
+## 🚀 Creación y Ejecución del Escaneo
+
+### **Paso 5: Crear Nuevo Escaneo**
+Scans → New Scan → [Seleccionar política creada]
+
+Target: 192.168.1.0/24 (ejemplo de red objetivo)
+
+Name: "Advanced_Network_Scan"
+
+text
+
+### **Paso 6: Configuración de Programación**
+Schedule Settings:
+❌ Desactivar: "Enabled" switch
+Dropdown: Seleccionar "Launch" → Start scan immediately
+
+text
+
+---
+
+## 📊 Tipos de Escaneado Adicionales
+
+### **Templates comunes para diferentes propósitos:**
+
+| Template | Uso Recomendado |
+|----------|----------------|
+| **Basic Network Scan** | Reconocimiento inicial rápido |
+| **Advanced Scan** | Análisis completo y profundo |
+| **Credentialed Patch Audit** | Verificación de actualizaciones con credenciales |
+| **Web Application Tests** | Vulnerabilidades específicas de aplicaciones web |
+| **Malware Scan** | Detección de malware en la red |
+
+---
+
+## ⚙️ Configuraciones Específicas para CEH
+
+### **Para evitar detección:**
+ADVANCED → Performance:
+
+Network timeout: 300 seconds
+
+Max simultaneous hosts: 5
+
+Max simultaneous checks: 5
+
+DISCOVERY → Host Discovery:
+❌ Ping the remote host
+❌ Test the common ports
+✅ Only test the ports listed below: 21,22,23,25,53,80,110,443,993,995
+
+text
+
+### **Para escaneo agresivo (laboratorio):**
+ADVANCED → Performance:
+
+Max simultaneous hosts: unlimited
+
+Max simultaneous checks: unlimited
+
+Network timeout: 60 seconds
+
+PORT SCANNERS:
+✅ SYN scan
+✅ TCP scan
+✅ UDP scan (selected ports)
+
+text
+
+---
+
+## 📈 Interpretación de Resultados
+
+### **Niveles de severidad:**
+- 🔴 **Critical**: Explotables remotamente, requieren atención inmediata
+- 🟠 **High**: Vulnerabilidades serias, posible compromiso del sistema
+- 🟡 **Medium**: Vulnerabilidades moderadas, riesgo medio
+- 🔵 **Low**: Problemas menores, riesgo bajo
+- ⚪ **Info**: Solo información, sin riesgo directo
+
+### **Plugins más importantes para CEH:**
+- **SMB vulnerabilities** (MS17-010, EternalBlue)
+- **Web application flaws** (SQL injection, XSS)
+- **Default credentials** (servicios con credenciales por defecto)
+- **SSL/TLS issues** (certificados vencidos, cifrados débiles)
+
+---
+
+## 💡 Tips para Examen CEH
+
+### **Flujo de trabajo recomendado:**
+1. **Escaneo inicial**: Basic Network Scan para identificar hosts activos
+2. **Escaneo detallado**: Advanced Scan en hosts críticos encontrados
+3. **Escaneo específico**: Web Application Tests si hay servidores web
+4. **Análisis**: Filtrar por severidad Critical/High primero
+
+### **Configuraciones clave para recordar:**
+- Deshabilitar ping para evitar firewalls
+- Usar "unlimited" sessions para máximo rendimiento
+- Verificar puertos TCP con enumeradores locales
+- Programar como "Launch" para ejecución inmediata
+
+### **Exportación de resultados:**
+Results → Export →
+Formatos disponibles: .nessus, .pdf, .html, .csv
+
+text
+
+---
+
+## 🚨 Comandos Post-Escaneo
+
+### **Para buscar vulnerabilidades específicas:**
+Results → Vulnerabilities → Filter by:
+
+Plugin Family: Windows, Web Servers, Databases
+
+Severity: Critical, High
+
+Plugin ID: (ej: 42873 para MS17-010)
+
+text
+
+### **Para análisis de hosts específicos:**
+Results → Hosts → [Seleccionar host] → Vulnerabilities
+
+Ver servicios detectados
+
+Analizar puertos abiertos
+
+Revisar información del OS
 
 ### OPENVAS
 **Alternativa opensource a Nessus**

@@ -735,7 +735,7 @@ IP Address       MAC Address       Count     Len  MAC Vendor / Hostname
 192.168.1.1      00:11:22:33:44:55  1        60   Cisco Systems
 192.168.1.10     aa:bb:cc:dd:ee:ff  1        60   Dell Inc.
 ```
-
+sudo arp-scan -I eth0 IP
 ---
 ## LDAP Enumeration
 
